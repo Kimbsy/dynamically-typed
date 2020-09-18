@@ -3,12 +3,12 @@
 ** DONE track progress towards commands
 ** DONE be able to clear all commands with space
 ** DONE display commands and progress
-** TODO commands move player
-** TODO player animations
-** TODO platforms
-** TODO gravity
-** TODO friction
+** DONE commands move player
+** DONE gravity
+** DONE platforms
+** DONE friction
 ** TODO walls
+** TODO player animations
 ** TODO level goal areas
 ** TODO level reset
 ** TODO desgin levels
@@ -16,6 +16,9 @@
 ** TODO how best to teach/discover new commands
 ** TODO game end
 ** TODO sound effects
+*** TODO SORT THAT WEIRD BUG
+*** DONE jump
+*** DONE dash
 ** TODO music
 ** TODO credits scene
 ** TODO display command aliases?
@@ -29,3 +32,6 @@
 *** TODO controls?
 *** TODO build instructions
 *** TODO source code
+
+* UPDATE QUIP
+** TODO made a change to add non-collision functions
