@@ -1,0 +1,30 @@
+* Things to do:
+** DONE come up with a data structure for commands
+** DONE track progress towards commands
+** DONE be able to clear all commands with space
+** TODO commands move player
+** TODO player animations
+** TODO platforms
+** TODO gravity
+** TODO friction
+** TODO walls
+** TODO display commands (progress, aliases?)
+** TODO level goal areas
+** TODO level reset
+** TODO desgin levels
+** TODO game intro
+** TODO how best to teach/discover new commands
+** TODO game end
+** TODO sound effects
+** TODO music
+** TODO credits scene
+** TODO kepress animation underlay thingy
+** TODO graphics settings? (option to remove animation underlay thingy)
+** TODO resizable screen
+** TODO submit game
+** TODO game submission page
+*** TODO screenshots
+*** TODO description
+*** TODO controls?
+*** TODO build instructions
+*** TODO source code
