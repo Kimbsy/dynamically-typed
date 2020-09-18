@@ -3,10 +3,12 @@
   (:require [dynamically-typed.scenes.credits :as credits]
             [dynamically-typed.scenes.level-1 :as level-1]
             [dynamically-typed.scenes.menu :as menu]
-            [quip.core :as quip]))
+            [quip.core :as quip]
+            [quip.sound :as qpsound]))
 
 (defn setup
   []
+  (qpsound/loop-music "sound/music/Blippy Trance.mp3")
   {})
 
 (defn init-scenes

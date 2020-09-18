@@ -4,7 +4,7 @@ My entry for the Autumn Lisp Game Jam 2020.
 
 ## Installation
 
-@TODO
+```lein uberjar```
 
 ## Usage
 

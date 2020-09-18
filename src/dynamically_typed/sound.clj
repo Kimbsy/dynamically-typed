@@ -4,7 +4,7 @@
 (defn jump
   []
   (prn "SOUNDS")
-  (qpsound/play-sound "sound/jump.mp3"))
+  (qpsound/play-sound "sound/jump2.mp3"))
 
 (defn dash
   []
