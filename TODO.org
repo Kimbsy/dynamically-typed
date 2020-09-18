@@ -2,13 +2,13 @@
 ** DONE come up with a data structure for commands
 ** DONE track progress towards commands
 ** DONE be able to clear all commands with space
+** DONE display commands and progress
 ** TODO commands move player
 ** TODO player animations
 ** TODO platforms
 ** TODO gravity
 ** TODO friction
 ** TODO walls
-** TODO display commands (progress, aliases?)
 ** TODO level goal areas
 ** TODO level reset
 ** TODO desgin levels
@@ -18,6 +18,7 @@
 ** TODO sound effects
 ** TODO music
 ** TODO credits scene
+** TODO display command aliases?
 ** TODO kepress animation underlay thingy
 ** TODO graphics settings? (option to remove animation underlay thingy)
 ** TODO resizable screen

@@ -13,7 +13,8 @@
 (defn draw-level
   [state]
   (qpu/background u/dark-grey)
-  (qpscene/draw-scene-sprites state))
+  (qpscene/draw-scene-sprites state)
+  (command/draw-commands state))
 
 (defn init-player
   []
@@ -46,5 +47,8 @@
    :draw-fn         draw-level
    :sprites         [(init-player)]
    :commands        {:jump (command/->command ["jump"  "hop" "leap"] jump)
-                     :dash  (command/->command ["dash" "run" "move" "go"] dash)}
+                     :dash  (command/->command ["dash" "run" "move" "go"] dash)
+                     :skip (command/->command ["skip"] identity)
+                     :corroborate (command/->command ["corroborate"] identity)
+                     :interfere (command/->command ["interfere"] identity)}
    :key-pressed-fns (key-pressed-fns)})

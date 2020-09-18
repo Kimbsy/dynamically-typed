@@ -1,6 +1,8 @@
 (ns dynamically-typed.command
   (:require [clojure.string :as s]
-            [dynamically-typed.utils :as u]))
+            [dynamically-typed.utils :as u]
+            [quil.core :as q]
+            [quip.utils :as qpu]))
 
 (defn ->progress
   [command-alias]
@@ -75,3 +77,28 @@
                              {}
                              commands))))
     state))
+
+(defn draw-character
+  [i c [x-offset y-offset]]
+  (q/text (str c) (+ x-offset (* i 12.5)) y-offset))
+
+(defn draw-command
+  [i [command-key command]]
+  (let [complete (apply str (:complete (first (:progression command))))
+        remaining (apply str (:remaining (first (:progression command))))]
+    (q/text-font (q/create-font qpu/default-font qpu/default-text-size))
+    (qpu/fill qpu/green)
+    (mapv #(draw-character %1 %2 [20 (+ 40 (* i 35))])
+          (range)
+          complete)
+    (qpu/fill qpu/white)
+    (mapv #(draw-character %1 %2 [(+ 20 (* 12.5 (count complete))) (+ 40 (* i 35))])
+          (range)
+          remaining)))
+
+(defn draw-commands
+  [{:keys [current-scene] :as state}]
+  (let [commands (get-in state [:scenes current-scene :commands])]
+    (->> commands
+         (sort-by first)
+         (mapv draw-command (range)))))
