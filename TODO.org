@@ -7,13 +7,20 @@
 ** DONE gravity
 ** DONE platforms
 ** DONE friction
-** TODO walls
-** TODO player animations
-** TODO level goal areas
-** TODO level reset
+** DONE level reset
 ** TODO desgin levels
+*** in progress
+** TODO level goal areas
+** TODO walls
+*** is this just another collider for platforms?
+** TODO player can only jump while landed
+** TODO special mid-air double jump zones?
+** TODO command completion animation
+** TODO end level transition
+** TODO player animations
 ** TODO game intro
 ** TODO how best to teach/discover new commands
+** TODO player visibly changing as levels progress
 ** TODO game end
 ** TODO sound effects
 *** TODO SORT THAT WEIRD BUG
@@ -34,4 +41,4 @@
 *** TODO source code
 
 * UPDATE QUIP
-** TODO made a change to add non-collision functions
+** DONE made a change to add non-collision functions

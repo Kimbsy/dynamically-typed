@@ -25,3 +25,14 @@
     (update s :vel (fn [[vx vy]]
                      [(zero-ish (* vx 0.95)) vy]))
     s))
+
+(defn reset-handler
+  "Create a key-pressed handler which will invoke a level-reset
+  function."
+  [reset-fn]
+  (fn [state {:keys [key-code modifiers] :as e}]
+    (if (and (= 82 key-code)
+             (modifiers :control))
+      (do (prn "***********==RESET==***********")
+          (reset-fn state))
+      state)))

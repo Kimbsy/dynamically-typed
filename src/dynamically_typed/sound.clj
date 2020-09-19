@@ -9,7 +9,9 @@
 ;; @TODO: make sound a toggleable setting
 (def ^:dynamic *sound-enabled* true)
 
-(def tracks {:default "sound/music/Blippy Trance.mp3"})
+(def tracks {:mellow "sound/music/Blippy Trance.mp3"
+             :driving "sound/music/Getting it Done.mp3"
+             :glitter "sound/music/Glitter Blast.mp3"})
 
 (def sound-effects {:jump ["sound/jump2.mp3"]
                     :dash ["sound/dash.mp3"]})
