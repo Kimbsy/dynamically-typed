@@ -1,17 +1,16 @@
 (ns dynamically-typed.scenes.level-05
   (:require [dynamically-typed.command :as command]
-            [dynamically-typed.player :as p]
+            [dynamically-typed.platform :as platform]
+            [dynamically-typed.player :as player]
             [dynamically-typed.utils :as u]
-            [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]
-            [quip.sprite :as qpsprite]
             [quip.utils :as qpu]))
 
 (defn update-level
   [state]
   (-> state
-      p/reset-player-flags
+      player/reset-player-flags
       qpcollision/update-collisions
       qpscene/update-scene-sprites))
 
@@ -23,36 +22,28 @@
 
 (defn init-platforms
   []
-  [(qpsprite/static-sprite :platforms
-                           [600 750]
-                           1200
-                           50
-                           "img/player.png" ; hack, we're not using an
-                                            ; image yet
-                           :draw-fn (fn [{[x y] :pos w :w h :h}]
-                                      (qpu/fill qpu/grey)
-                                      (q/rect (- x (/ w 2))
-                                              (- y (/ h 2))
-                                              w
-                                              h)))])
+  [(platform/->platform [0 800] 1000 1300)
+   (platform/->platform [1200 0] 1200 600)
+   (platform/->platform [650 800] 100 800)
+   (platform/->platform [1200 800] 1000 500)])
 
 (defn sprites
   []
-  (concat [(p/init-player)]
+  (concat [(player/init-player)]
           (init-platforms)))
 
 (defn commands
   []
-  {:jump (command/->command ["jump"] p/jump)
-   :dash (command/->command ["dash"] p/dash)})
+  {:jump (command/->command ["jump"] player/jump)
+   :dash (command/->command ["dash"] player/dash)})
 
 (defn colliders
   []
   [(qpcollision/collider
     :player
     :platforms
-    p/player-landed
-    identity
+    player/player-hit-platform
+    qpcollision/identity-collide-fn
     :collision-detection-fn qpcollision/w-h-rects-collide?)])
 
 (defn reset-level

@@ -13,7 +13,7 @@
 
 (defn setup
   []
-  (sound/loop-track :mellow)
+  (sound/loop-track :driving)
   {})
 
 (defn init-scenes
@@ -37,7 +37,7 @@
     :size           [1200 800]
     :setup          setup
     :init-scenes-fn init-scenes
-    :current-scene  :level-03
+    :current-scene  :level-05
     :on-close       cleanup}))
 
 (defn -main

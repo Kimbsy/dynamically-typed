@@ -8,9 +8,10 @@
 
 (defn zero-ish
   [i]
-  (if (< i 0.01)
-    0
-    i))
+  (let [delta 0.01]
+    (if (< (- delta) i delta)
+      0
+      i)))
 
 (defn apply-gravity
   [{:keys [landed] :as s}]

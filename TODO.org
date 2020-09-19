@@ -12,13 +12,15 @@
 ** DONE design enough levels
 *** first 9 ideas sketched out
 ** DONE player can only jump while landed
+** DONE walls
+*** is this just another collider for platforms?
+*** or maybe just a check in the existing collider to determine orientation
+** TODO player can't go through world bounds
+** TODO should turning change current x vel?
 ** TODO kill zone
 ** TODO special mid-air double jump zones?
 ** TODO anchor zones for grabbing
 ** TODO level goal areas
-** TODO walls
-*** is this just another collider for platforms?
-*** or maybe just a check in the existing collider to determine orientation
 ** TODO command completion animation
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
@@ -29,14 +31,16 @@
 ** TODO how best to teach/discover new commands
 ** TODO game end
 ** TODO sound effects
-*** TODO SORT THAT WEIRD BUG
-**** some files seem to crash the sound engine
 *** DONE jump
 *** DONE dash
+*** DONE turn
 *** TODO stop
-*** TODO turn
 *** TODO grab
 *** TODO death
+** TODO SORT THAT SOUND CRASHING BUG
+*** some files seem to crash the sound engine
+*** maybe just keep making them until they work?
+*** are they working across machines?
 ** TODO credits scene
 ** TODO desgin more levels
 ** TODO display command aliases?
@@ -53,3 +57,4 @@
 
 * UPDATE QUIP
 ** DONE made a change to add non-collision functions
+** DONE made a change to pass `b` sprites into collide-fn-a functions

@@ -14,7 +14,8 @@
              :glitter "sound/music/Glitter Blast.mp3"})
 
 (def sound-effects {:jump ["sound/jump2.mp3"]
-                    :dash ["sound/dash.mp3"]})
+                    :dash ["sound/dash.mp3"]
+                    :turn ["sound/turn.mp3"]})
 
 (defn ->player
   [resource-name]
@@ -51,10 +52,15 @@
 
 (defn jump
   []
-  (prn "SOUNDS")
+  (prn "<<SOUNDS>>")
   (play-sound-effect :jump))
 
 (defn dash
   []
-  (prn "SOUNDS")
+  (prn "<<SOUNDS>>")
   (play-sound-effect :dash))
+
+(defn turn
+  []
+  (prn "<<SOUNDS>>")
+  (play-sound-effect :turn))
