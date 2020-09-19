@@ -1,17 +1,17 @@
 (ns dynamically-typed.scenes.level-06
   (:require [dynamically-typed.command :as command]
-            [dynamically-typed.sound :as sound]
+            [dynamically-typed.player :as p]
             [dynamically-typed.utils :as u]
             [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]
             [quip.sprite :as qpsprite]
-            [quip.utils :as qpu]
-            [dynamically-typed.player :as p]))
+            [quip.utils :as qpu]))
 
 (defn update-level
   [state]
   (-> state
+      p/reset-player-flags
       qpcollision/update-collisions
       qpscene/update-scene-sprites))
 
@@ -43,11 +43,8 @@
 
 (defn commands
   []
-  {:jump        (command/->command ["jump"  "hop" "leap"] p/jump)
-   :dash        (command/->command ["dash" "run" "move" "go"] p/dash)
-   :skip        (command/->command ["skip"] identity)
-   :corroborate (command/->command ["corroborate"] identity)
-   :interfere   (command/->command ["interfere"] identity)})
+  {:jump (command/->command ["jump"] p/jump)
+   :dash (command/->command ["dash"] p/dash)})
 
 (defn colliders
   []

@@ -16,10 +16,8 @@
       (merge {:landed    false
               :direction [1 1]})))
 
-(defn jump
+(defn reset-player-flags
   [{:keys [current-scene] :as state}]
-  (prn "**JUMPING**")
-  (sound/jump)
   (let [sprites     (get-in state [:scenes current-scene :sprites])
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
@@ -27,26 +25,41 @@
               [:scenes current-scene :sprites]
               (conj non-players
                     (-> player
-                        (update :vel (fn [[vx vy]] [vx (- vy 5)]))
-                        (update :pos (fn [[x y]] [x (- y 10)]))
                         (assoc :landed false))))))
+
+(defn jump
+  [{:keys [current-scene] :as state}]
+  (let [sprites     (get-in state [:scenes current-scene :sprites])
+        non-players (remove #(#{:player} (:sprite-group %)) sprites)
+        player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
+    (if (:landed player)
+      (do (prn "**JUMPING**")
+          (sound/jump)
+          (assoc-in state
+                    [:scenes current-scene :sprites]
+                    (conj non-players
+                          (-> player
+                              (update :vel (fn [[vx vy]] [vx (- vy 5)]))
+                              (update :pos (fn [[x y]] [x (- y 10)]))
+                              (assoc :landed false)))))
+      state)))
 
 (defn dash
   [{:keys [current-scene] :as state}]
-  (prn "**DASHING**")
-  (sound/dash)
   (let [sprites     (get-in state [:scenes current-scene :sprites])
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))
         direction   (:direction player)]
-    (assoc-in state
-              [:scenes current-scene :sprites]
-              (conj non-players
-                    (-> player
-                        (update :vel (fn [vel]
-                                       (map + vel
-                                            (map * direction
-                                                 [10 0])))))))))
+    (do (prn "**DASHING**")
+        (sound/dash)
+        (assoc-in state
+                  [:scenes current-scene :sprites]
+                  (conj non-players
+                        (-> player
+                            (update :vel (fn [vel]
+                                           (map + vel
+                                                (map * direction
+                                                     [10 0]))))))))))
 
 (defn player-landed
   [p]

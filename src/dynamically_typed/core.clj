@@ -37,7 +37,7 @@
     :size           [1200 800]
     :setup          setup
     :init-scenes-fn init-scenes
-    :current-scene  :level-02
+    :current-scene  :level-03
     :on-close       cleanup}))
 
 (defn -main
