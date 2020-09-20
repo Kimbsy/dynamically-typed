@@ -16,9 +16,12 @@
 *** is this just another collider for platforms?
 *** or maybe just a check in the existing collider to determine orientation
 ** DONE player can't go through world bounds
-** TODO level goal areas
-** TODO end level transition
+** DONE level goal areas
+** DONE end level transition
 ** TODO kill zone
+** TODO stop command
+** TODO reset should be a command
+** TODO design teaching reset level
 ** TODO command completion animation
 ** TODO special mid-air double jump zones?
 ** TODO anchor zones for grabbing

@@ -1,4 +1,5 @@
-(ns dynamically-typed.utils)
+(ns dynamically-typed.utils
+  (:require [quip.scene :as qpscene]))
 
 (def dark-grey [30 30 30])
 
@@ -37,3 +38,20 @@
       (do (prn "***********==RESET==***********")
           (reset-fn state))
       state)))
+
+(defn check-victory-fn
+  [target-scene]
+  (fn [{:keys [current-scene end-level-timeout] :as state}]
+    (let [sprites (get-in state [:scenes current-scene :sprites])
+          goal    (first (filter #(#{:goal} (:sprite-group %)) sprites))]
+      state
+      (if (#{:complete} (:current-animation goal))
+        (if (nil? end-level-timeout)
+          (assoc state :end-level-timeout 150)
+          (if (<= end-level-timeout 0)
+            (-> state
+                (dissoc :end-level-timeout)
+                (qpscene/transition target-scene
+                                    :transition-length 50))
+            (update state :end-level-timeout dec)))
+        state))))

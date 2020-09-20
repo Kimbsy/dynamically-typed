@@ -1,7 +1,8 @@
 (ns dynamically-typed.scenes.level-05
   (:require [dynamically-typed.command :as command]
-            [dynamically-typed.platform :as platform]
-            [dynamically-typed.player :as player]
+            [dynamically-typed.sprites.goal :as goal]
+            [dynamically-typed.sprites.platform :as platform]
+            [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]
@@ -32,7 +33,8 @@
 
 (defn sprites
   []
-  (concat [(player/init-player)]
+  (concat [(player/init-player)
+           (goal/->goal [1000 518])]
           (init-platforms)))
 
 (defn commands
@@ -42,12 +44,8 @@
 
 (defn colliders
   []
-  [(qpcollision/collider
-    :player
-    :platforms
-    player/player-hit-platform
-    qpcollision/identity-collide-fn
-    :collision-detection-fn qpcollision/w-h-rects-collide?)])
+  [(platform/platform-collider)
+   (goal/goal-collider)])
 
 (defn reset-level
   [{:keys [current-scene] :as state}]

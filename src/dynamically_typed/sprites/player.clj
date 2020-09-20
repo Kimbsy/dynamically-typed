@@ -1,4 +1,4 @@
-(ns dynamically-typed.player
+(ns dynamically-typed.sprites.player
   (:require [quip.sprite :as qpsprite]
             [dynamically-typed.utils :as u]
             [dynamically-typed.sound :as sound]
@@ -6,7 +6,7 @@
 
 (defn init-player
   ([]
-   (init-player [100 7]))
+   (init-player [100 70]))
   ([pos]
    (-> (qpsprite/animated-sprite :player
                                  pos

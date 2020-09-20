@@ -1,7 +1,7 @@
 (ns dynamically-typed.scenes.level-06
   (:require [dynamically-typed.command :as command]
-            [dynamically-typed.platform :as platform]
-            [dynamically-typed.player :as player]
+            [dynamically-typed.sprites.platform :as platform]
+            [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]

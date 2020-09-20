@@ -1,7 +1,9 @@
-(ns dynamically-typed.platform
+(ns dynamically-typed.sprites.platform
   (:require [quil.core :as q]
+            [quip.collision :as qpcollision]
             [quip.sprite :as qpsprite]
-            [quip.utils :as qpu]))
+            [quip.utils :as qpu]
+            [dynamically-typed.sprites.player :as player]))
 
 (defn draw-platform
   [{[x y] :pos w :w h :h}]
@@ -38,3 +40,12 @@
    (world-bottom)
    (world-left)
    (world-right)])
+
+(defn platform-collider
+  []
+  (qpcollision/collider
+    :player
+    :platforms
+    player/player-hit-platform
+    qpcollision/identity-collide-fn
+    :collision-detection-fn qpcollision/w-h-rects-collide?))
