@@ -1,7 +1,8 @@
 (ns dynamically-typed.player
   (:require [quip.sprite :as qpsprite]
             [dynamically-typed.utils :as u]
-            [dynamically-typed.sound :as sound]))
+            [dynamically-typed.sound :as sound]
+            [quip.utils :as qpu]))
 
 (defn init-player
   ([]
@@ -79,31 +80,32 @@
                                                  (map * d [-1 1])))))))))
 
 (defn top-hit?
-  [ply-y plf-y1 plf-x1 plf-x2 ply-x1 ply-x2]
-  (and (< ply-y plf-y1)
+  [vel-offset-y ply-y plf-y1 plf-x1 plf-x2 ply-x1 ply-x2]
+  (and (< ply-y (+ plf-y1 vel-offset-y))
        (<= plf-x1 ply-x2)
        (<= ply-x1 plf-x2)))
 
 (defn bottom-hit?
-  [ply-y plf-y2 plf-x1 plf-x2 ply-x1 ply-x2]
-  (and (< plf-y2 ply-y)
+  [vel-offset-y ply-y plf-y2 plf-x1 plf-x2 ply-x1 ply-x2]
+  (and (< (+ plf-y2 vel-offset-y) ply-y)
        (<= plf-x1 ply-x2)
        (<= ply-x1 plf-x2)))
 
 (defn left-hit?
-  [ply-x plf-x1 plf-y1 plf-y2 ply-y1 ply-y2]
-  (and (< ply-x plf-x1)
+  [vel-offset-x ply-x plf-x1 plf-y1 plf-y2 ply-y1 ply-y2]
+  (and (< ply-x (+ plf-x1 vel-offset-x))
        (<= plf-y1 ply-y2)
        (<= ply-y1 plf-y2)))
 
 (defn right-hit?
-  [ply-x plf-x2 plf-y1 plf-y2 ply-y1 ply-y2]
-  (and (< plf-x2 ply-x)
+  [vel-offset-x ply-x plf-x2 plf-y1 plf-y2 ply-y1 ply-y2]
+  (and (< (+ plf-x2 vel-offset-x) ply-x)
        (<= plf-y1 ply-y2)
        (<= ply-y1 plf-y2)))
 
 (defn player-hit-platform
-  [{[ply-x ply-y] :pos
+  [{[vx vy]       :vel
+    [ply-x ply-y] :pos
     ply-w         :w
     ply-h         :h
     :as           player}
@@ -118,27 +120,33 @@
         plf-x1 (- plf-x (/ plf-w 2))
         plf-x2 (+ plf-x (/ plf-w 2))
         plf-y1 (- plf-y (/ plf-h 2))
-        plf-y2 (+ plf-y (/ plf-h 2))]
+        plf-y2 (+ plf-y (/ plf-h 2))
+        vel-offset-x (if (< (/ ply-w 2) (Math/abs vx))
+                       (- vx (/ ply-w 2))
+                       0)
+        vel-offset-y (if (< (/ ply-h 2) (Math/abs vy))
+                       (- vy (/ ply-h 2))
+                       0)]
     (cond
-      (top-hit? ply-y plf-y1 plf-x1 plf-x2 ply-x1 ply-x2)
+      (top-hit? vel-offset-y ply-y plf-y1 plf-x1 plf-x2 ply-x1 ply-x2)
       (-> player
           (update :vel (fn [[vx vy]] [vx 0]))
           (update :pos (fn [[x y]] [x (- plf-y1 (/ ply-h 2))]))
           (assoc :landed true))
 
-      (bottom-hit? ply-y plf-y2 plf-x1 plf-x2 ply-x1 ply-x2)
+      (bottom-hit? vel-offset-y ply-y plf-y2 plf-x1 plf-x2 ply-x1 ply-x2)
       (-> player
           (update :vel (fn [[vx vy]] [vx 0]))
           (update :pos (fn [[x y]] [x (inc (+ plf-y2 (/ ply-h 2)))]))
           (assoc :landed false))
 
-      (left-hit? ply-x plf-x1 plf-y1 plf-y2 ply-y1 ply-y2)
+      (left-hit? vel-offset-x ply-x plf-x1 plf-y1 plf-y2 ply-y1 ply-y2)
       (-> player
           (update :vel (fn [[vx vy]] [0 vy]))
           (update :pos (fn [[x y]] [(dec (- plf-x1 (/ ply-w 2))) y]))
           (assoc :landed false))
 
-      (right-hit? ply-x plf-x2 plf-y1 plf-y2 ply-y1 ply-y2)
+      (right-hit? vel-offset-x ply-x plf-x2 plf-y1 plf-y2 ply-y1 ply-y2)
       (-> player
           (update :vel (fn [[vx vy]] [0 vy]))
           (update :pos (fn [[x y]] [(inc (+ plf-x2 (/ ply-w 2))) y]))

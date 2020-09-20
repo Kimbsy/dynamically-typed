@@ -15,16 +15,16 @@
 ** DONE walls
 *** is this just another collider for platforms?
 *** or maybe just a check in the existing collider to determine orientation
-** TODO player can't go through world bounds
-** TODO should turning change current x vel?
+** DONE player can't go through world bounds
+** TODO level goal areas
+** TODO end level transition
 ** TODO kill zone
+** TODO command completion animation
 ** TODO special mid-air double jump zones?
 ** TODO anchor zones for grabbing
-** TODO level goal areas
-** TODO command completion animation
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
-** TODO end level transition
+** TODO should turning change current x vel?
 ** TODO player visibly changing as levels progress
 ** TODO player animations
 ** TODO game intro

@@ -22,7 +22,10 @@
 
 (defn init-platforms
   []
-  [(platform/->platform [0 800] 1000 1300)
+  [(platform/world-top)
+   (platform/world-left)
+   (platform/world-right)
+   (platform/->platform [0 800] 1000 1300)
    (platform/->platform [1200 0] 1200 600)
    (platform/->platform [650 800] 100 800)
    (platform/->platform [1200 800] 1000 500)])

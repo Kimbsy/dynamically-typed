@@ -22,12 +22,13 @@
 
 (defn init-platforms
   []
-  [(platform/->platform [600 750] 1200 50)])
+  [(platform/floor)])
 
 (defn sprites
   []
   (concat [(player/init-player)]
-          (init-platforms)))
+          (init-platforms)
+          (platform/world-bounds)))
 
 (defn commands
   []

@@ -22,7 +22,10 @@
 
 (defn init-platforms
   []
-  [(platform/->platform [0 500] 1000 50)
+  [(platform/world-top)
+   (platform/world-left)
+   (platform/world-right)
+   (platform/->platform [0 500] 1000 50)
    (platform/->platform [1200 500] 1000 50)])
 
 (defn sprites
