@@ -18,7 +18,12 @@
 ** DONE player can't go through world bounds
 ** DONE level goal areas
 ** DONE end level transition
+** DONE turning should change current x vel
 ** TODO kill zone
+** TODO game end
+** TODO game intro
+** TODO player animations
+** TODO player visibly changing as levels progress
 ** TODO stop command
 ** TODO reset should be a command
 ** TODO design teaching reset level
@@ -27,16 +32,13 @@
 ** TODO anchor zones for grabbing
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
-** TODO should turning change current x vel?
-** TODO player visibly changing as levels progress
-** TODO player animations
-** TODO game intro
 ** TODO how best to teach/discover new commands
-** TODO game end
 ** TODO sound effects
 *** DONE jump
 *** DONE dash
 *** DONE turn
+*** TODO level complete
+*** TODO reset
 *** TODO stop
 *** TODO grab
 *** TODO death

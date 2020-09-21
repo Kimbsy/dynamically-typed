@@ -60,9 +60,9 @@
                   (conj non-players
                         (-> player
                             (update :vel (fn [vel]
-                                           (map + vel
-                                                (map * direction
-                                                     [10 0]))))))))))
+                                           (u/add vel
+                                                  (u/multiply direction
+                                                              [10 0]))))))))))
 
 (defn turn
   [{:keys [current-scene] :as state}]
@@ -76,8 +76,8 @@
                   [:scenes current-scene :sprites]
                   (conj non-players
                         (-> player
-                            (update :direction (fn [d]
-                                                 (map * d [-1 1])))))))))
+                            (update :direction u/flip-x)
+                            (update :vel u/flip-x)))))))
 
 (defn top-hit?
   [vel-offset-y ply-y plf-y1 plf-x1 plf-x2 ply-x1 ply-x2]

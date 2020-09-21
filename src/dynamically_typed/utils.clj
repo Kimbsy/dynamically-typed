@@ -7,6 +7,22 @@
               \L \l \M \m \N \n \O \o \P \p \Q \q \R \r \S \s \T \t \U \u \V \v
               \W \w \X \x \Y \y \Z \z})
 
+(defn add
+  [v1 v2]
+  (map + v1 v2))
+
+(defn multiply
+  [v1 v2]
+  (map * v1 v2))
+
+(defn flip-x
+  [v]
+  (multiply v [-1 1]))
+
+(defn flip-y
+  [v]
+  (multiply v [1 -1]))
+
 (defn zero-ish
   [i]
   (let [delta 0.01]
