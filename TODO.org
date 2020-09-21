@@ -21,6 +21,7 @@
 ** DONE turning should change current x vel
 ** DONE credits scene
 ** DONE menu scene
+** DONE player animations
 ** TODO kill zone
 ** TODO command completion animation
 ** TODO command failed animation
@@ -30,7 +31,6 @@
 ** TODO game end
 ** TODO game intro
 ** TODO how best to teach/discover new commands
-** TODO player animations
 ** TODO player visibly changing as levels progress
 ** TODO stop command
 ** TODO reset should be a command

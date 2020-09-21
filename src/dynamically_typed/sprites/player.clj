@@ -4,6 +4,16 @@
             [dynamically-typed.sound :as sound]
             [quip.utils :as qpu]))
 
+(defn decay-animation-timer
+  [{:keys [animation-timer] :as p}]
+  (if (some? animation-timer)
+    (if (zero? animation-timer)
+      (-> p
+          (assoc :animation-timer nil)
+          (assoc :current-animation :idle))
+      (update p :animation-timer dec))
+    p))
+
 (defn init-player
   ([]
    (init-player [100 70]))
@@ -12,12 +22,27 @@
                                  pos
                                  32
                                  32
-                                 "img/player.png"
+                                 "img/player/player.png"
                                  :update-fn (comp qpsprite/update-animated-sprite
                                                   u/apply-gravity
-                                                  u/apply-friction))
-       (merge {:landed    false
-               :direction [1 1]}))))
+                                                  u/apply-friction
+                                                  decay-animation-timer)
+                                 :animations {:idle {:frames      4
+                                                     :y-offset    0
+                                                     :frame-delay 10}
+                                              :jump {:frames      6
+                                                     :y-offset    1
+                                                     :frame-delay 5}
+                                              :dash {:frames      6
+                                                     :y-offset    2
+                                                     :frame-delay 5}
+                                              :turn {:frames      6
+                                                     :y-offset    3
+                                                     :frame-delay 2}}
+                                 :current-animation :idle)
+       (merge {:landed          false
+               :direction       [1 1]
+               :animation-timer nil}))))
 
 (defn reset-player-flags
   [{:keys [current-scene] :as state}]
@@ -44,7 +69,9 @@
                           (-> player
                               (update :vel (fn [[vx vy]] [vx (- vy 5)]))
                               (update :pos (fn [[x y]] [x (- y 10)]))
-                              (assoc :landed false)))))
+                              (assoc :landed false)
+                              (qpsprite/set-animation :jump)
+                              (assoc :animation-timer 30)))))
       state)))
 
 (defn dash
@@ -62,7 +89,9 @@
                             (update :vel (fn [vel]
                                            (u/add vel
                                                   (u/multiply direction
-                                                              [10 0]))))))))))
+                                                              [10 0]))))
+                            (qpsprite/set-animation :dash)
+                            (assoc :animation-timer 30)))))))
 
 (defn turn
   [{:keys [current-scene] :as state}]
@@ -77,7 +106,9 @@
                   (conj non-players
                         (-> player
                             (update :direction u/flip-x)
-                            (update :vel u/flip-x)))))))
+                            (update :vel u/flip-x)
+                            (qpsprite/set-animation :turn)
+                            (assoc :animation-timer 12)))))))
 
 (defn top-hit?
   [vel-offset-y ply-y plf-y1 plf-x1 plf-x2 ply-x1 ply-x2]
