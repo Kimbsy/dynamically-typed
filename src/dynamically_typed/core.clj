@@ -13,19 +13,19 @@
 
 (defn setup
   []
-  (sound/loop-track :driving)
+  (sound/loop-track :mellow)
   {})
 
 (defn init-scenes
   []
-  {:menu    (menu/init)
+  {:menu     (menu/init)
    :level-01 (level-01/init)
    :level-02 (level-02/init)
    :level-03 (level-03/init)
    :level-04 (level-04/init)
    :level-05 (level-05/init)
    :level-06 (level-06/init)
-   :credits (credits/init)})
+   :credits  (credits/init)})
 
 (defn cleanup
   [state]
@@ -37,7 +37,7 @@
     :size           [1200 800]
     :setup          setup
     :init-scenes-fn init-scenes
-    :current-scene  :level-04
+    :current-scene  :menu
     :on-close       cleanup}))
 
 (defn -main

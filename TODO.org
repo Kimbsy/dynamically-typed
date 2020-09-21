@@ -19,20 +19,27 @@
 ** DONE level goal areas
 ** DONE end level transition
 ** DONE turning should change current x vel
+** DONE credits scene
+** DONE menu scene
 ** TODO kill zone
+** TODO command completion animation
+** TODO command failed animation
+*** for if you grab when you shouldn't or jump in mid air
+** TODO FIX FONT ISSUE
+*** current font only supported on linux, make sure we have a monospaced font in all OSes
 ** TODO game end
 ** TODO game intro
+** TODO how best to teach/discover new commands
 ** TODO player animations
 ** TODO player visibly changing as levels progress
 ** TODO stop command
 ** TODO reset should be a command
 ** TODO design teaching reset level
-** TODO command completion animation
 ** TODO special mid-air double jump zones?
 ** TODO anchor zones for grabbing
-** TODO command failed animation
-*** for if you grab when you shouldn't or jump in mid air
-** TODO how best to teach/discover new commands
+** TODO add fireworks to credits scene
+** TODO update kill zone to look like lava
+** TODO prettify menu scene
 ** TODO sound effects
 *** DONE jump
 *** DONE dash
@@ -46,7 +53,6 @@
 *** some files seem to crash the sound engine
 *** maybe just keep making them until they work?
 *** are they working across machines?
-** TODO credits scene
 ** TODO desgin more levels
 ** TODO display command aliases?
 ** TODO kepress animation underlay thingy
@@ -63,3 +69,5 @@
 * UPDATE QUIP
 ** DONE made a change to add non-collision functions
 ** DONE made a change to pass `b` sprites into collide-fn-a functions
+** DONE made a change to add identity update-fn for buttons
+** DONE made a change to add identity update-fn for text sprites

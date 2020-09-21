@@ -56,18 +56,35 @@
       state)))
 
 (defn check-victory-fn
-  [target-scene]
-  (fn [{:keys [current-scene end-level-timeout] :as state}]
-    (let [sprites (get-in state [:scenes current-scene :sprites])
-          goal    (first (filter #(#{:goal} (:sprite-group %)) sprites))]
-      state
-      (if (#{:complete} (:current-animation goal))
-        (if (nil? end-level-timeout)
-          (assoc state :end-level-timeout 150)
-          (if (<= end-level-timeout 0)
-            (-> state
-                (dissoc :end-level-timeout)
-                (qpscene/transition target-scene
-                                    :transition-length 50))
-            (update state :end-level-timeout dec)))
-        state))))
+  ([target-scene]
+   (check-victory-fn target-scene identity))
+  ([target-scene init-fn]
+   (fn [{:keys [current-scene end-level-timeout] :as state}]
+     (let [sprites (get-in state [:scenes current-scene :sprites])
+           goal    (first (filter #(#{:goal} (:sprite-group %)) sprites))]
+       (if (#{:complete} (:current-animation goal))
+         (if (nil? end-level-timeout)
+           (assoc state :end-level-timeout 150)
+           (if (<= end-level-timeout 0)
+             (-> state
+                 (dissoc :end-level-timeout)
+                 (qpscene/transition target-scene
+                                     :transition-length 50
+                                     :init-fn init-fn))
+             (update state :end-level-timeout dec)))
+         state)))))
+
+(defn unclick
+  [b]
+  )
+
+(defn unclick-all-buttons
+  [{:keys [current-scene] :as state}]
+  (let [sprites     (get-in state [:scenes current-scene :sprites])
+        buttons     (filter #(#{:button} (:sprite-group %)) sprites)
+        non-buttons (remove #(#{:button} (:sprite-group %)) sprites)]
+    (-> state
+        (assoc-in [:scenes current-scene :sprites]
+                  (concat non-buttons
+                          (map #(assoc % :held? false)
+                               buttons))))))

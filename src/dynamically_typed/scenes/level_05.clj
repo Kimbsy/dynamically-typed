@@ -1,5 +1,6 @@
 (ns dynamically-typed.scenes.level-05
   (:require [dynamically-typed.command :as command]
+            [dynamically-typed.sound :as sound]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
@@ -13,7 +14,11 @@
   (-> state
       player/reset-player-flags
       qpcollision/update-collisions
-      qpscene/update-scene-sprites))
+      qpscene/update-scene-sprites
+      ((u/check-victory-fn :credits (fn [state]
+                                      (sound/stop-music)
+                                      (sound/loop-track :glitter)
+                                      state)))))
 
 (defn draw-level
   [state]
@@ -40,7 +45,8 @@
 (defn commands
   []
   {:jump (command/->command ["jump"] player/jump)
-   :dash (command/->command ["dash"] player/dash)})
+   :dash (command/->command ["dash"] player/dash)
+   :turn (command/->command ["turn"] player/turn)})
 
 (defn colliders
   []
