@@ -1,5 +1,6 @@
 (ns dynamically-typed.scenes.menu
-  (:require [dynamically-typed.sound :as sound]
+  (:require [dynamically-typed.scenes.credits :as credits]
+            [dynamically-typed.sound :as sound]
             [dynamically-typed.utils :as u]
             [quil.core :as q]
             [quip.scene :as qpscene]
@@ -25,7 +26,9 @@
                                  (sound/stop-music)
                                  (sound/loop-track :driving)
                                  (prn "PLAY")
-                                 (u/unclick-all-buttons state))))
+                                 (-> state
+                                     (assoc-in [:scenes :credits :commands] (credits/commands))
+                                     u/unclick-all-buttons))))
 
 (defn on-click-quit
   [state e]

@@ -28,6 +28,7 @@
 *** for if you grab when you shouldn't or jump in mid air
 ** TODO FIX FONT ISSUE
 *** current font only supported on linux, make sure we have a monospaced font in all OSes
+*** gonna need to make command displays be in terms of font dimensions, not hard coded
 ** TODO game end
 ** TODO game intro
 ** TODO how best to teach/discover new commands

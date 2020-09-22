@@ -89,7 +89,7 @@
   {:update-fn          update-credits
    :draw-fn            draw-credits
    :sprites            (sprites)
-   :commands           (commands)
+   :commands           []
    :key-pressed-fns    (key-pressed-fns)
    :mouse-pressed-fns  [qpbutton/handle-buttons-pressed]
    :mouse-released-fns [qpbutton/handle-buttons-released]})
