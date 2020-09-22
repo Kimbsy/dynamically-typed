@@ -5,6 +5,7 @@
 (def light-blue [75 75 250])
 (def light-red [250 75 75])
 (def light-green [75 250 75])
+(def player-pink [233 30 98])
 
 (def alpha? #{\A \a \B \b \C \c \D \d \E \e \F \f \G \g \H \h \I \i \J \j \K \k
               \L \l \M \m \N \n \O \o \P \p \Q \q \R \r \S \s \T \t \U \u \V \v

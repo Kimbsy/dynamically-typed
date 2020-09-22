@@ -1,6 +1,7 @@
 (ns dynamically-typed.scenes.level-03
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sprites.goal :as goal]
+            [dynamically-typed.sprites.particle :as particle]
             [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
@@ -14,6 +15,7 @@
       player/reset-player-flags
       qpcollision/update-collisions
       qpscene/update-scene-sprites
+      particle/clear-particles
       ((u/check-victory-fn :level-04))))
 
 (defn draw-level
@@ -33,7 +35,7 @@
 (defn sprites
   []
   (concat [(player/init-player)
-           (goal/->goal [1000 443])]
+           (goal/->goal [1125 443])]
           (init-platforms)))
 
 (defn commands
@@ -43,7 +45,8 @@
 
 (defn colliders
   []
-  [(platform/platform-collider)
+  [(platform/platform-collider :player)
+   (platform/platform-collider :particles)
    (goal/goal-collider)])
 
 (defn reset-level

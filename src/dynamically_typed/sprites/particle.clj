@@ -14,7 +14,8 @@
   (q/rect x y w h))
 
 (defn ->particle
-  [pos vel color]
+  [pos vel color
+   & {:keys [life] :or {life 50}}]
   {:sprite-group :particles
    :uuid         (java.util.UUID/randomUUID)
    :pos          pos
@@ -27,10 +28,11 @@
    :static?      false
    :update-fn    (comp qpsprite/update-image-sprite
                        u/apply-gravity
+                       u/apply-friction
                        u/decay-life-timer)
    :draw-fn      draw-particle
    :bounds-fn    qpsprite/default-bounding-poly
-   :life         50})
+   :life         life})
 
 (defn randomize
   [v]
@@ -52,11 +54,14 @@
          (rand-int (count colors)))))
 
 (defn ->particle-group
-  [pos vel]
-  (let [color (random-color)]
-    (take 30 (repeatedly #(->particle (randomize pos)
-                                      (randomize vel)
-                                      (randomize-color color))))))
+  [pos vel & {:keys [color count life]
+              :or   {color (random-color)
+                     count 30
+                     life  50}}]
+  (take count (repeatedly #(->particle (randomize pos)
+                                       (randomize vel)
+                                       (randomize-color color)
+                                       :life life))))
 
 (defn clear-particles
   [{:keys [current-scene] :as state}]
