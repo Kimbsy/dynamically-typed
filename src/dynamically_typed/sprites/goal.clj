@@ -21,5 +21,5 @@
    qpcollision/identity-collide-fn
    (fn [{:keys [current-animation] :as g} _]
      (if (#{:incomplete} current-animation)
-       (assoc g :current-animation :complete)
+       (qpsprite/set-animation g :complete)
        g))))

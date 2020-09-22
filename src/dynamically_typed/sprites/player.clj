@@ -10,7 +10,7 @@
     (if (zero? animation-timer)
       (-> p
           (assoc :animation-timer nil)
-          (assoc :current-animation :idle))
+          (qpsprite/set-animation :idle))
       (update p :animation-timer dec))
     p))
 
