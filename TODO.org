@@ -23,17 +23,17 @@
 ** DONE menu scene
 ** DONE player animations
 ** DONE add fireworks to credits scene
+** TODO command pickup sprite
+** TODO FIX FONT ISSUE
+*** current font only supported on linux, make sure we have a monospaced font in all OSes
+*** gonna need to make command display be in terms of font dimensions, not hard coded
 ** TODO command completion animation
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
-** TODO FIX FONT ISSUE
-*** current font only supported on linux, make sure we have a monospaced font in all OSes
-*** gonna need to make command displays be in terms of font dimensions, not hard coded
 ** TODO reset should be a command
 ** TODO design teaching reset level
 ** TODO game end
 ** TODO game intro
-** TODO how best to teach/discover new commands
 ** TODO player visibly changing as levels progress
 ** TODO quit to menu command
 ** TODO stop command
@@ -74,3 +74,4 @@
 ** DONE made a change to pass `b` sprites into collide-fn-a functions
 ** DONE made a change to add identity update-fn for buttons
 ** DONE made a change to add identity update-fn for text sprites
+** TODO scene transition delay (so we can see buttons unpress)

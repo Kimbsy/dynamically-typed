@@ -2,6 +2,7 @@
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.particle :as particle]
+            [dynamically-typed.sprites.pickup :as pickup]
             [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
@@ -33,15 +34,15 @@
 (defn sprites
   []
   (concat [(player/init-player [150 70])
-           (goal/->goal [200 718])]
+           (goal/->goal [200 718])
+           (pickup/->pickup [1130 125] {:turn (command/->command ["turn"] player/turn)})]
           (init-platforms)
           (platform/world-bounds)))
 
 (defn commands
   []
   {:jump (command/->command ["jump"] player/jump)
-   :dash (command/->command ["dash"] player/dash)
-   :turn (command/->command ["turn"] player/turn)})
+   :dash (command/->command ["dash"] player/dash)})
 
 (defn colliders
   []
