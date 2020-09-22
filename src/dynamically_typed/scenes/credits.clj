@@ -1,6 +1,8 @@
 (ns dynamically-typed.scenes.credits
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sound :as sound]
+            [dynamically-typed.sprites.firework :as firework]
+            [dynamically-typed.sprites.particle :as particle]
             [dynamically-typed.utils :as u]
             [quil.core :as q]
             [quip.scene :as qpscene]
@@ -11,7 +13,9 @@
 (defn update-credits
   [state]
   (-> state
-      qpscene/update-scene-sprites))
+      qpscene/update-scene-sprites
+      firework/pop-fireworks
+      particle/clear-particles))
 
 (defn draw-credits
   [state]
@@ -62,8 +66,11 @@
           (button-sprites)))
 
 (defn celebrate
-  [state]
-  state)
+  [{:keys [current-scene] :as state}]
+  (-> state
+      (update-in [:scenes current-scene :sprites]
+                 (fn [sprites]
+                   (conj sprites (firework/->firework))))))
 
 (defn celebrate-commands
   [commands]

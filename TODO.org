@@ -22,23 +22,25 @@
 ** DONE credits scene
 ** DONE menu scene
 ** DONE player animations
-** TODO kill zone
+** DONE add fireworks to credits scene
 ** TODO command completion animation
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
 ** TODO FIX FONT ISSUE
 *** current font only supported on linux, make sure we have a monospaced font in all OSes
 *** gonna need to make command displays be in terms of font dimensions, not hard coded
+** TODO reset should be a command
+** TODO design teaching reset level
 ** TODO game end
 ** TODO game intro
 ** TODO how best to teach/discover new commands
 ** TODO player visibly changing as levels progress
+** TODO quit to menu command
 ** TODO stop command
-** TODO reset should be a command
-** TODO design teaching reset level
 ** TODO special mid-air double jump zones?
 ** TODO anchor zones for grabbing
-** TODO add fireworks to credits scene
+** TODO kill zone
+*** is this necessary? can't they just fall forever?
 ** TODO update kill zone to look like lava
 ** TODO prettify menu scene
 ** TODO sound effects

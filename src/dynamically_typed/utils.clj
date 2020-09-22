@@ -2,6 +2,9 @@
   (:require [quip.scene :as qpscene]))
 
 (def dark-grey [30 30 30])
+(def light-blue [75 75 250])
+(def light-red [250 75 75])
+(def light-green [75 250 75])
 
 (def alpha? #{\A \a \B \b \C \c \D \d \E \e \F \f \G \g \H \h \I \i \J \j \K \k
               \L \l \M \m \N \n \O \o \P \p \Q \q \R \r \S \s \T \t \U \u \V \v
@@ -43,6 +46,10 @@
     (update s :vel (fn [[vx vy]]
                      [(zero-ish (* vx 0.95)) vy]))
     s))
+
+(defn decay-life-timer
+  [s]
+  (update s :life dec))
 
 (defn reset-handler
   "Create a key-pressed handler which will invoke a level-reset
