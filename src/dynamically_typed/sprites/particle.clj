@@ -54,10 +54,11 @@
          (rand-int (count colors)))))
 
 (defn ->particle-group
-  [pos vel & {:keys [color count life]
-              :or   {color (random-color)
-                     count 30
-                     life  50}}]
+  [pos vel
+   & {:keys [color count life]
+      :or   {color (random-color)
+             count 30
+             life  50}}]
   (take count (repeatedly #(->particle (randomize pos)
                                        (randomize vel)
                                        (randomize-color color)
@@ -85,8 +86,10 @@
       p)))
 
 (defn ->homing-particle-group
-  [pos vel target-pos]
-  (let [basic-group (->particle-group pos vel)]
+  [pos vel target-pos
+   & {:keys [color]
+      :or {color u/light-blue}}]
+  (let [basic-group (->particle-group pos vel :color color)]
     (map (fn [p]
            (-> p
                (assoc :targeting-delay 30)

@@ -40,7 +40,8 @@
            (pickup/->pickup [1142 133]
                             {:turn (command/->command ["turn"]
                                                       player/turn
-                                                      :display-delay 65)})]
+                                                      :display-delay 65
+                                                      :green-delay 100)})]
           (init-platforms)
           (platform/world-bounds)))
 

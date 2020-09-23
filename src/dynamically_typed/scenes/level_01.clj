@@ -16,6 +16,7 @@
       qpcollision/update-collisions
       qpscene/update-scene-sprites
       particle/clear-particles
+      command/decay-display-delays
       ((u/check-victory-fn :level-02))))
 
 (defn draw-level

@@ -87,7 +87,8 @@
   []
   (celebrate-commands
    ["yay" "woohoo" "terrific" "celebrate" "yes" "nice" "super" "wow"
-    "cool" "party" "amazing" "fantastic" "awesome" "fun" "enjoy" "great"]))
+    "hooray" "excellent" "cool" "party" "amazing" "fantastic"
+    "awesome" "fun" "enjoy" "great" "lovely"]))
 
 (defn key-pressed-fns
   []

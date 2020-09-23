@@ -17,6 +17,7 @@
       qpcollision/update-collisions
       qpscene/update-scene-sprites
       particle/clear-particles
+      command/decay-display-delays
       ((u/check-victory-fn :credits (fn [state]
                                       (sound/stop-music)
                                       (sound/loop-track :glitter)

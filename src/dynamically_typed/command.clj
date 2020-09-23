@@ -1,6 +1,7 @@
 (ns dynamically-typed.command
   (:require [clojure.string :as s]
             [dynamically-typed.sound :as sound]
+            [dynamically-typed.sprites.particle :as particle]
             [dynamically-typed.utils :as u]
             [quil.core :as q]
             [quip.utils :as qpu]))
@@ -12,12 +13,15 @@
 
 (defn ->command
   [aliases on-complete
-   & {:keys [display-delay]
-      :or   {display-delay -1}}]
+   & {:keys [display-delay
+             green-delay]
+      :or   {display-delay -1
+             green-delay   -1}}]
   {:aliases       aliases
    :on-complete   on-complete
    :progression   (map ->progress aliases)
-   :display-delay display-delay})
+   :display-delay display-delay
+   :green-delay   green-delay})
 
 (defn complete?
   [{:keys [progression]}]
@@ -36,12 +40,33 @@
   (assoc command :progression
          (mapv #(update-progress % k) progression)))
 
+(defn particle-burst
+  [{:keys [current-scene] :as state} command-key]
+  (let [ordered-commands (sort-by first (get-in state [:scenes current-scene :commands]))
+        i                (->> ordered-commands
+                              (keep-indexed #(when (#{command-key} (first %2)) %1))
+                              first)
+        y-offset         (+ 35 (* i 35))
+        x-offset         (+ 20 (* 12.5 (/ (count (name command-key)) 2)))
+        sprites          (get-in state [:scenes current-scene :sprites])]
+    (-> state
+        (assoc-in [:scenes current-scene :sprites]
+                  (concat sprites
+                          (particle/->particle-group [x-offset y-offset]
+                                                     [0 0]
+                                                     :color u/light-green
+                                                     :count 15
+                                                     :life 100))))))
+
 (defn reset-command
   [{:keys [current-scene] :as state}
    command-key
    {:keys [aliases on-complete] :as command}]
-  (assoc-in state [:scenes current-scene :commands command-key]
-            (->command aliases on-complete)))
+  (-> state
+      (particle-burst command-key)
+      (assoc-in [:scenes current-scene :commands command-key]
+                (-> (->command aliases on-complete)
+                    (assoc :green-delay 10)))))
 
 (defn apply-on-completes
   [{:keys [current-scene] :as state}]
@@ -87,16 +112,17 @@
   (q/text (str c) (+ x-offset (* i 12.5)) y-offset))
 
 (defn draw-command
-  [i [command-key {:keys [display-delay] :as command}] font]
+  [i [command-key {:keys [display-delay green-delay] :as command}] font]
   (when (neg? display-delay)
-    (let [complete (apply str (:complete (first (:progression command))))
+    (let [complete  (apply str (:complete (first (:progression command))))
           remaining (apply str (:remaining (first (:progression command))))]
       (q/text-font font)
       (qpu/fill qpu/green)
       (mapv #(draw-character %1 %2 [20 (+ 40 (* i 35))])
             (range)
             complete)
-      (qpu/fill qpu/white)
+      (when (neg? green-delay)
+        (qpu/fill qpu/white))
       (mapv #(draw-character %1 %2 [(+ 20 (* 12.5 (count complete))) (+ 40 (* i 35))])
             (range)
             remaining))))
@@ -116,5 +142,7 @@
                      (map (fn [[k {:keys [display-delay] :as c}]]
                             (when (zero? display-delay)
                               (sound/new-command))
-                            [k (update c :display-delay dec)])
+                            [k (-> c
+                                   (update :display-delay dec)
+                                   (update :green-delay dec))])
                           commands)))))

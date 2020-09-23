@@ -15,9 +15,9 @@
                                 pos
                                 48 48
                                 "img/pickup/pickup.png"
-                                :animations {:mutate {:frames      52
-                                                      :y-offset    0
-                                                      :frame-delay 6}
+                                :animations {:mutate    {:frames      52
+                                                         :y-offset    0
+                                                         :frame-delay 6}
                                              :activated {:frames      10
                                                          :y-offset    1
                                                          :frame-delay 2}}
