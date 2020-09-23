@@ -1,5 +1,10 @@
 (ns dynamically-typed.scenes.credits
   (:require [dynamically-typed.command :as command]
+            [dynamically-typed.scenes.level-01 :as level-01]
+            [dynamically-typed.scenes.level-02 :as level-02]
+            [dynamically-typed.scenes.level-03 :as level-03]
+            [dynamically-typed.scenes.level-04 :as level-04]
+            [dynamically-typed.scenes.level-05 :as level-05]
             [dynamically-typed.sound :as sound]
             [dynamically-typed.sprites.firework :as firework]
             [dynamically-typed.sprites.particle :as particle]
@@ -37,7 +42,13 @@
                                  (sound/stop-music)
                                  (sound/loop-track :mellow)
                                  (prn "MENU")
-                                 (u/unclick-all-buttons state))))
+                                 (-> state
+                                     (assoc-in [:scenes :level-01] (level-01/init))
+                                     (assoc-in [:scenes :level-02] (level-02/init))
+                                     (assoc-in [:scenes :level-03] (level-03/init))
+                                     (assoc-in [:scenes :level-04] (level-04/init))
+                                     (assoc-in [:scenes :level-05] (level-05/init))
+                                     (u/unclick-all-buttons)))))
 
 (defn text-sprites
   []

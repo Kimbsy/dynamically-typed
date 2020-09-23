@@ -2,6 +2,7 @@
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.particle :as particle]
+            [dynamically-typed.sprites.pickup :as pickup]
             [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
@@ -9,11 +10,14 @@
             [quip.scene :as qpscene]
             [quip.utils :as qpu]))
 
+(declare reset-level)
+
 (defn update-level
   [state]
   (-> state
       player/reset-player-flags
       qpcollision/update-collisions
+      pickup/remove-finished-pickups
       qpscene/update-scene-sprites
       particle/clear-particles
       command/decay-display-delays
@@ -36,7 +40,12 @@
 (defn sprites
   []
   (concat [(player/init-player)
-           (goal/->goal [1125 443])]
+           (goal/->goal [1125 443])
+           (pickup/->pickup [800 850]
+                            {:reset (command/->command ["reset"]
+                                                       reset-level
+                                                       :display-delay 65
+                                                       :green-delay 100)})]
           (init-platforms)))
 
 (defn commands
@@ -48,14 +57,19 @@
   []
   [(platform/platform-collider :player)
    (platform/platform-collider :particles)
-   (goal/goal-collider)])
+   (goal/goal-collider)
+   (assoc (pickup/pickup-collider)
+          :collision-detection-fn
+          (fn [{[x y] :pos :as player} _]
+            (< 820 y)))])
 
 (defn reset-level
   [{:keys [current-scene] :as state}]
   (prn "resetting level 3")
   (-> state
       (assoc-in [:scenes current-scene :sprites] (sprites))
-      (assoc-in [:scenes current-scene :commands] (commands))
+      (assoc-in [:scenes current-scene :commands]
+                (assoc (commands) :reset (command/->command ["reset"] reset-level)))
       (assoc-in [:scenes current-scene :colliders] (colliders))))
 
 (defn key-pressed-fns

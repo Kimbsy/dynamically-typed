@@ -47,8 +47,8 @@
 
 (defn commands
   []
-  {:jump (command/->command ["jump"] player/jump)
-   :dash (command/->command ["dash"] player/dash)})
+  {:jump  (command/->command ["jump"] player/jump)
+   :dash  (command/->command ["dash"] player/dash)})
 
 (defn colliders
   []

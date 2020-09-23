@@ -4,6 +4,7 @@
 (def dark-grey [30 30 30])
 (def light-blue [75 75 250])
 (def light-red [250 75 75])
+(def light-yellow [255 255 75])
 (def light-green [75 250 75])
 (def player-pink [233 30 98])
 

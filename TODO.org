@@ -28,7 +28,8 @@
 *** current font only supported on linux, make sure we have a monospaced font in all OSes
 *** gonna need to make command display be in terms of font dimensions, not hard coded
 ** DONE command completion animation
-** TODO reset should be a command
+** DONE reset should be a command
+** TODO clean up print statements
 ** TODO design teaching reset level
 ** TODO game intro
 ** TODO game end
@@ -46,7 +47,6 @@
 *** DONE turn
 *** DONE level complete
 *** DONE new command
-*** TODO reset
 *** TODO stop
 *** TODO grab
 *** TODO firework pop?

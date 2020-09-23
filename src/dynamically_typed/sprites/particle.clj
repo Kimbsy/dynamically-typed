@@ -88,14 +88,16 @@
 (defn ->homing-particle-group
   [pos vel target-pos
    & {:keys [color]
-      :or {color u/light-blue}}]
-  (let [basic-group (->particle-group pos vel :color color)]
+      :or {color u/light-yellow}}]
+  (let [basic-group (->particle-group pos vel :color color :life 100)]
     (map (fn [p]
            (-> p
+               (assoc :phasing? true)
                (assoc :targeting-delay 30)
                (assoc :update-fn (comp qpsprite/update-image-sprite
                                        (retarget target-pos)
-                                       (remove-arrived target-pos)))))
+                                       (remove-arrived target-pos)
+                                       u/decay-life-timer))))
          basic-group)))
 
 (defn clear-particles

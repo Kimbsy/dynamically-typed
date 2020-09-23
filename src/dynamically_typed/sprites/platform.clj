@@ -123,4 +123,7 @@
     :platforms
     sprite-hit-platform
     qpcollision/identity-collide-fn
-    :collision-detection-fn qpcollision/w-h-rects-collide?))
+    :collision-detection-fn
+    (fn [{:keys [phasing?] :as s} platform]
+      (if-not phasing?
+        (qpcollision/w-h-rects-collide? s platform)))))
