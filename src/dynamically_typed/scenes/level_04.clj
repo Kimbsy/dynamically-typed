@@ -15,6 +15,7 @@
   (-> state
       player/reset-player-flags
       qpcollision/update-collisions
+      pickup/remove-finished-pickups
       qpscene/update-scene-sprites
       particle/clear-particles
       ((u/check-victory-fn :level-05))))
@@ -35,7 +36,7 @@
   []
   (concat [(player/init-player [150 70])
            (goal/->goal [200 718])
-           (pickup/->pickup [1130 125] {:turn (command/->command ["turn"] player/turn)})]
+           (pickup/->pickup [1142 133] {:turn (command/->command ["turn"] player/turn)})]
           (init-platforms)
           (platform/world-bounds)))
 
@@ -48,6 +49,7 @@
   []
   [(platform/platform-collider :player)
    (platform/platform-collider :particles)
+   (pickup/pickup-collider)
    (goal/goal-collider)])
 
 (defn reset-level

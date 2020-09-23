@@ -82,10 +82,6 @@
              (update state :end-level-timeout dec)))
          state)))))
 
-(defn unclick
-  [b]
-  )
-
 (defn unclick-all-buttons
   [{:keys [current-scene] :as state}]
   (let [sprites     (get-in state [:scenes current-scene :sprites])
@@ -96,3 +92,11 @@
                   (concat non-buttons
                           (map #(assoc % :held? false)
                                buttons))))))
+
+(defn extract-sprite-group
+  [{:keys [current-scene] :as state} group]
+  (let [sprites           (get-in state [:scenes current-scene :sprites])
+        group-sprites     (filter #(#{group} (:sprite-group %)) sprites)
+        non-group-sprites (remove #(#{group} (:sprite-group %)) sprites)]
+    [group-sprites
+     non-group-sprites]))
