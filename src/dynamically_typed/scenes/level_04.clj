@@ -18,6 +18,7 @@
       pickup/remove-finished-pickups
       qpscene/update-scene-sprites
       particle/clear-particles
+      command/decay-display-delays
       ((u/check-victory-fn :level-05))))
 
 (defn draw-level
@@ -36,7 +37,10 @@
   []
   (concat [(player/init-player [150 70])
            (goal/->goal [200 718])
-           (pickup/->pickup [1142 133] {:turn (command/->command ["turn"] player/turn)})]
+           (pickup/->pickup [1142 133]
+                            {:turn (command/->command ["turn"]
+                                                      player/turn
+                                                      :display-delay 65)})]
           (init-platforms)
           (platform/world-bounds)))
 

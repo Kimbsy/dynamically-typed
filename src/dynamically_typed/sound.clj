@@ -17,7 +17,8 @@
                     :dash ["sound/dash.mp3"]
                     :turn ["sound/turn.mp3"]
                     :pickup ["sound/pickup.mp3"]
-                    :finish ["sound/finish.mp3"]})
+                    :finish ["sound/finish.mp3"]
+                    :new-command ["sound/new-command.mp3"]})
 
 (defn ->player
   [resource-name]
@@ -54,25 +55,24 @@
 
 (defn jump
   []
-  (prn "<<SOUNDS>>")
   (play-sound-effect :jump))
 
 (defn dash
   []
-  (prn "<<SOUNDS>>")
   (play-sound-effect :dash))
 
 (defn turn
   []
-  (prn "<<SOUNDS>>")
   (play-sound-effect :turn))
 
 (defn pickup
   []
-  (prn "<<SOUNDS>>")
   (play-sound-effect :pickup))
 
 (defn finish
   []
-  (prn "<<SOUNDS>>")
   (play-sound-effect :finish))
+
+(defn new-command
+  []
+  (play-sound-effect :new-command))

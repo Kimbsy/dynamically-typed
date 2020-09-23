@@ -2,8 +2,7 @@
   (:require [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.sprite :as qpsprite]
-            [quip.utils :as qpu]
-            [dynamically-typed.sprites.player :as player]))
+            [quip.utils :as qpu]))
 
 (defn draw-platform
   [{[x y] :pos w :w h :h}]

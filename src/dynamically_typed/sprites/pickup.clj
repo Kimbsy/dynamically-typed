@@ -60,7 +60,7 @@
 (defn generate-letters
   [{:keys [pos] :as p}]
   ;; for now just do a particle animation
-  (particle/->particle-group pos [0 0]))
+  (particle/->homing-particle-group pos [0 0] [20 110]))
 
 (defn remove-finished-pickups
   [{:keys [current-scene] :as state}]

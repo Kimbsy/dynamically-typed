@@ -63,6 +63,38 @@
                                        (randomize-color color)
                                        :life life))))
 
+(defn retarget
+  [[tx ty]]
+  (fn [{[px py]         :pos
+        current-vel     :vel
+        targeting-delay :targeting-delay
+        :as             p}]
+    (if (pos? targeting-delay)
+      (update p :targeting-delay dec)
+      (let [tv   [(- tx px) (- ty py)]
+            utv  (u/unit-vector tv)
+            tvel (u/multiply utv [2 3])]
+        (assoc p :vel (u/add current-vel tvel))))))
+
+(defn remove-arrived
+  [[tx ty]]
+  (fn [{[px py] :pos :as p}]
+    (if (and (< (Math/abs (int (- tx px))) 100)
+             (< (Math/abs (int (- ty py))) 100))
+      (assoc p :life -1)
+      p)))
+
+(defn ->homing-particle-group
+  [pos vel target-pos]
+  (let [basic-group (->particle-group pos vel)]
+    (map (fn [p]
+           (-> p
+               (assoc :targeting-delay 30)
+               (assoc :update-fn (comp qpsprite/update-image-sprite
+                                       (retarget target-pos)
+                                       (remove-arrived target-pos)))))
+         basic-group)))
+
 (defn clear-particles
   [{:keys [current-scene] :as state}]
   (let [sprites       (get-in state [:scenes current-scene :sprites])

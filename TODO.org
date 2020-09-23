@@ -48,10 +48,12 @@
 *** DONE dash
 *** DONE turn
 *** DONE level complete
+*** DONE new command
 *** TODO reset
 *** TODO stop
 *** TODO grab
 *** TODO death
+*** TODO firework pop
 ** TODO SORT THAT SOUND CRASHING BUG
 *** some files seem to crash the sound engine
 *** maybe just keep making them until they work?
@@ -75,3 +77,5 @@
 ** DONE made a change to add identity update-fn for buttons
 ** DONE made a change to add identity update-fn for text sprites
 ** TODO scene transition delay (so we can see buttons unpress)
+** TODO a generalised way of creating delayed actions
+** TODO a way of defining and applying tweens to sprites

@@ -11,6 +11,23 @@
               \L \l \M \m \N \n \O \o \P \p \Q \q \R \r \S \s \T \t \U \u \V \v
               \W \w \X \x \Y \y \Z \z})
 
+(defn zero-vector?
+  "Predicate to check if a vector has length 0."
+  [v]
+  (every? zero? v))
+
+(defn magnitude
+  "Calculate the length of a vector."
+  [v]
+  (Math/sqrt (reduce + (map #(Math/pow % 2)
+                            v))))
+
+(defn unit-vector
+  "Calculate the unit vector of a given 2D vector."
+  [v]
+  (when-not (zero-vector? v)
+    (map #(/ % (magnitude v)) v)))
+
 (defn add
   [v1 v2]
   (map + v1 v2))
@@ -72,7 +89,7 @@
            goal    (first (filter #(#{:goal} (:sprite-group %)) sprites))]
        (if (#{:complete} (:current-animation goal))
          (if (nil? end-level-timeout)
-           (assoc state :end-level-timeout 150)
+           (assoc state :end-level-timeout 100)
            (if (<= end-level-timeout 0)
              (-> state
                  (dissoc :end-level-timeout)
