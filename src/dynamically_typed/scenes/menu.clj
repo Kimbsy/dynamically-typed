@@ -50,11 +50,12 @@
                          [(* (q/width) 1/2)
                           (* (q/height) 1/5)]
                          :color qpu/white
+                         :font "font/UbuntuMono-Regular.ttf"
                          :size qpu/title-text-size)
    (qpsprite/text-sprite "home row warm-ups reccomended!"
                          [(* (q/width) 1/2)
                           (* (q/height) 5/20)]
-                         :font qpu/italic-font
+                         :font "font/UbuntuMono-Italic.ttf"
                          :color qpu/white)])
 
 (defn button-sprites
@@ -62,15 +63,18 @@
   [(qpbutton/button-sprite "Play"
                            [(* (q/width) 1/2) (* (q/height) 1/2)]
                            :on-click on-click-play
-                           :content-color qpu/white)
+                           :content-color qpu/white
+                           :font "font/UbuntuMono-Regular.ttf")
    (qpbutton/button-sprite "Quit"
                            [(* (q/width) 1/2) (* (q/height) 2/3)]
                            :on-click on-click-quit
-                           :content-color qpu/white)
+                           :content-color qpu/white
+                           :font "font/UbuntuMono-Regular.ttf")
    (qpbutton/button-sprite "Credits"
                            [(* (q/width) 1/2) (* (q/height) 5/6)]
                            :on-click on-click-credits
-                           :content-color qpu/white)])
+                           :content-color qpu/white
+                           :font "font/UbuntuMono-Regular.ttf")])
 
 (defn sprites
   []

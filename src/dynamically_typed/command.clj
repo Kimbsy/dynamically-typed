@@ -83,10 +83,10 @@
   (q/text (str c) (+ x-offset (* i 12.5)) y-offset))
 
 (defn draw-command
-  [i [command-key command]]
+  [i [command-key command] font]
   (let [complete (apply str (:complete (first (:progression command))))
         remaining (apply str (:remaining (first (:progression command))))]
-    (q/text-font (q/create-font qpu/default-font qpu/default-text-size))
+    (q/text-font font)
     (qpu/fill qpu/green)
     (mapv #(draw-character %1 %2 [20 (+ 40 (* i 35))])
           (range)
@@ -97,8 +97,8 @@
           remaining)))
 
 (defn draw-commands
-  [{:keys [current-scene] :as state}]
+  [{:keys [current-scene default-font] :as state}]
   (let [commands (get-in state [:scenes current-scene :commands])]
     (->> commands
          (sort-by first)
-         (mapv draw-command (range)))))
+         (mapv #(draw-command %1 %2 default-font) (range)))))

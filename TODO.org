@@ -24,7 +24,7 @@
 ** DONE player animations
 ** DONE add fireworks to credits scene
 ** DONE command pickup sprite
-** TODO FIX FONT ISSUE
+** DONE FIX FONT ISSUE
 *** current font only supported on linux, make sure we have a monospaced font in all OSes
 *** gonna need to make command display be in terms of font dimensions, not hard coded
 ** TODO command completion animation

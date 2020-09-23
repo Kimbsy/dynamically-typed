@@ -44,15 +44,18 @@
   [(qpsprite/text-sprite "A game by Kimbsy"
                          [(* (q/width) 1/2)
                           (* (q/height) 6/20)]
-                         :color qpu/black)
+                         :color qpu/black
+                         :font "font/UbuntuMono-Regular.ttf")
    (qpsprite/text-sprite "Music by Kevin MacLeod (incompetech.com)"
                          [(* (q/width) 1/2)
                           (* (q/height) 19/40)]
-                         :color qpu/black)
+                         :color qpu/black
+                         :font "font/UbuntuMono-Regular.ttf")
    (qpsprite/text-sprite "Played by You!"
                          [(* (q/width) 1/2)
                           (* (q/height) 13/20)]
-                         :color qpu/black)])
+                         :color qpu/black
+                         :font "font/UbuntuMono-Regular.ttf")])
 
 (defn button-sprites
   []

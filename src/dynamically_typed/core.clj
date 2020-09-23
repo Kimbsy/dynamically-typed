@@ -8,12 +8,14 @@
             [dynamically-typed.scenes.level-05 :as level-05]
             [dynamically-typed.scenes.menu :as menu]
             [dynamically-typed.sound :as sound]
-            [quip.core :as quip]))
+            [quip.core :as quip]
+            [quip.utils :as qpu]
+            [quil.core :as q]))
 
 (defn setup
   []
   (sound/loop-track :mellow)
-  {})
+  {:default-font (q/create-font "font/UbuntuMono-Regular.ttf" qpu/default-text-size)})
 
 (defn init-scenes
   []
