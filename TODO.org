@@ -47,7 +47,7 @@
 *** DONE jump
 *** DONE dash
 *** DONE turn
-*** TODO level complete
+*** DONE level complete
 *** TODO reset
 *** TODO stop
 *** TODO grab

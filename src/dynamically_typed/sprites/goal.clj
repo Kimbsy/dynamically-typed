@@ -1,5 +1,6 @@
 (ns dynamically-typed.sprites.goal
-  (:require [quip.collision :as qpcollision]
+  (:require [dynamically-typed.sound :as sound]
+            [quip.collision :as qpcollision]
             [quip.sprite :as qpsprite]))
 
 (defn ->goal
@@ -21,5 +22,7 @@
    qpcollision/identity-collide-fn
    (fn [{:keys [current-animation] :as g} _]
      (if (#{:incomplete} current-animation)
-       (qpsprite/set-animation g :complete)
+       (do
+         (sound/finish)
+         (qpsprite/set-animation g :complete))
        g))))
