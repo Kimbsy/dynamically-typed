@@ -55,10 +55,10 @@
           (init-platforms)))
 
 (defn commands
-  []
-  {:jump  (command/->command ["jump"] player/jump :green-delay 40)
-   :dash  (command/->command ["dash"] player/dash :green-delay 20)
-   :turn  (command/->command ["turn"] player/turn :green-delay 60)})
+  [green-delay?]
+  {:jump  (command/->command ["jump"] player/jump :green-delay (if green-delay? 40 0))
+   :dash  (command/->command ["dash"] player/dash :green-delay (if green-delay? 20 0))
+   :turn  (command/->command ["turn"] player/turn :green-delay (if green-delay? 60 0))})
 
 (defn colliders
   []
@@ -75,7 +75,9 @@
   (-> state
       (assoc-in [:scenes current-scene :sprites] (sprites))
       (assoc-in [:scenes current-scene :commands]
-                (assoc (commands) :reset (command/->command ["reset"] reset-level)))
+                (assoc (commands false)
+                       :reset
+                       (command/->command ["reset"] reset-level)))
       (assoc-in [:scenes current-scene :colliders] (colliders))))
 
 (defn key-pressed-fns
@@ -89,6 +91,6 @@
   {:update-fn       update-level
    :draw-fn         draw-level
    :sprites         (sprites)
-   :commands        (commands)
+   :commands        (commands true)
    :key-pressed-fns (key-pressed-fns)
    :colliders       (colliders)})
