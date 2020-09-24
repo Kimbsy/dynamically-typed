@@ -32,7 +32,8 @@
 
 (defn cleanup
   [state]
-  (sound/stop-music))
+  (sound/stop-music)
+  (System/exit 0))
 
 (def game
   (quip/game
