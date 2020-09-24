@@ -62,8 +62,7 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
     (if (:landed player)
-      (do (prn "**JUMPING**")
-          (sound/jump)
+      (do (sound/jump)
           (assoc-in state
                     [:scenes current-scene :sprites]
                     (concat non-players
@@ -86,8 +85,7 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))
         direction   (:direction player)]
-    (do (prn "**DASHING**")
-        (sound/dash)
+    (do (sound/dash)
         (assoc-in state
                   [:scenes current-scene :sprites]
                   (concat non-players
@@ -110,8 +108,7 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))
         direction   (:direction player)]
-    (do (prn "**TURNING**")
-        (sound/turn)
+    (do (sound/turn)
         (assoc-in state
                   [:scenes current-scene :sprites]
                   (conj non-players

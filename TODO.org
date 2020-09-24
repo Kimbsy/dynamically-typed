@@ -31,10 +31,10 @@
 ** DONE reset should be a command
 ** DONE design teaching reset
 ** DONE game intro
-** TODO prettify menu scene
+** DONE prettify menu scene
+** DONE clean up print statements
 ** TODO prettify platforms
 ** TODO game end
-** TODO clean up print statements
 ** TODO player visibly changing as levels progress
 ** TODO quit to menu command
 ** TODO design more levels

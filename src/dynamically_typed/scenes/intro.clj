@@ -1,14 +1,14 @@
 (ns dynamically-typed.scenes.intro
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sprites.goal :as goal]
+            [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
             [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]
             [quip.sprite :as qpsprite]
-            [quip.utils :as qpu]
-            [dynamically-typed.sprites.platform :as platform]))
+            [quip.utils :as qpu]))
 
 (defn update-intro
   [state]

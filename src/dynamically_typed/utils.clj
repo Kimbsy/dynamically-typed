@@ -7,6 +7,8 @@
 (def light-yellow [255 255 75])
 (def light-green [75 250 75])
 (def player-pink [233 30 98])
+(def platform-blue [24 255 255])
+(def button-teal [0 150 167])
 
 (def alpha? #{\A \a \B \b \C \c \D \d \E \e \F \f \G \g \H \h \I \i \J \j \K \k
               \L \l \M \m \N \n \O \o \P \p \Q \q \R \r \S \s \T \t \U \u \V \v
@@ -77,8 +79,7 @@
   (fn [state {:keys [key-code modifiers] :as e}]
     (if (and (= 82 key-code)
              (modifiers :control))
-      (do (prn "***********==RESET==***********")
-          (reset-fn state))
+      (reset-fn state)
       state)))
 
 (defn check-victory-fn

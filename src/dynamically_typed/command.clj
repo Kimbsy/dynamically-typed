@@ -120,13 +120,12 @@
 (defn clear
   [{:keys [current-scene] :as state} {k :key :as e}]
   (if (= :space k)
-    (do (prn "------CLEAR------")
-        (update-in state [:scenes current-scene :commands]
-                   (fn [commands]
-                     (reduce (fn [acc [command-key {:keys [aliases on-complete]}]]
-                               (assoc acc command-key (->command aliases on-complete)))
-                             {}
-                             commands))))
+    (update-in state [:scenes current-scene :commands]
+               (fn [commands]
+                 (reduce (fn [acc [command-key {:keys [aliases on-complete]}]]
+                           (assoc acc command-key (->command aliases on-complete)))
+                         {}
+                         commands)))
     state))
 
 (defn draw-character

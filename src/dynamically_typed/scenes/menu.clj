@@ -13,9 +13,35 @@
   (-> state
       qpscene/update-scene-sprites))
 
+(defn draw-header
+  []
+  ;; (qpu/fill qpu/white)
+  ;; (q/rect 270 90 660 140)
+  (let [points [[-30 140]
+                [535 140]
+                [635 38]
+                [1200 38]
+                [1200 115]
+                [665 115]
+                [565 215]
+                [-30 215]]]
+    (qpu/fill u/player-pink)
+    (q/begin-shape)
+    (->> points
+         (map (fn [p] (map + p [0 -15])))
+         (mapv #(apply q/vertex %)))
+    (q/end-shape)
+    (qpu/fill u/platform-blue)
+    (q/begin-shape)
+    (->> points
+         (map (fn [p] (map + [30 85] p)))
+         (mapv #(apply q/vertex %)))
+    (q/end-shape)))
+
 (defn draw-menu
   [state]
-  (q/background 190)
+  (qpu/background u/dark-grey)
+  (draw-header)
   (qpscene/draw-scene-sprites state))
 
 (defn on-click-play
@@ -25,7 +51,6 @@
                       :init-fn (fn [state]
                                  (sound/stop-music)
                                  (sound/loop-track :driving)
-                                 (prn "PLAY")
                                  (-> state
                                      (assoc-in [:scenes :credits :commands] (credits/commands))
                                      u/unclick-all-buttons))))
@@ -41,38 +66,41 @@
                       :init-fn (fn [state]
                                  (sound/stop-music)
                                  (sound/loop-track :glitter)
-                                 (prn "CREDITS")
                                  (u/unclick-all-buttons state))))
 
 (defn text-sprites
   []
   [(qpsprite/text-sprite "Dynamically Typed"
-                         [(* (q/width) 1/2)
-                          (* (q/height) 1/5)]
+                         [(+ (* (q/width) 1/2) 4)
+                          (+ (* (q/height) 1/4) 4)]
                          :color qpu/white
                          :font "font/UbuntuMono-Regular.ttf"
-                         :size qpu/title-text-size)
-   (qpsprite/text-sprite "home row warm-ups reccomended!"
+                         :size 100)
+   (qpsprite/text-sprite "Dynamically Typed"
                          [(* (q/width) 1/2)
-                          (* (q/height) 5/20)]
-                         :font "font/UbuntuMono-Italic.ttf"
-                         :color qpu/white)])
+                          (* (q/height) 1/4)]
+                         :color u/dark-grey
+                         :font "font/UbuntuMono-Regular.ttf"
+                         :size 100)])
 
 (defn button-sprites
   []
   [(qpbutton/button-sprite "Play"
                            [(* (q/width) 1/2) (* (q/height) 1/2)]
                            :on-click on-click-play
+                           :color u/button-teal
                            :content-color qpu/white
                            :font "font/UbuntuMono-Regular.ttf")
    (qpbutton/button-sprite "Quit"
                            [(* (q/width) 1/2) (* (q/height) 2/3)]
                            :on-click on-click-quit
+                           :color u/button-teal
                            :content-color qpu/white
                            :font "font/UbuntuMono-Regular.ttf")
    (qpbutton/button-sprite "Credits"
                            [(* (q/width) 1/2) (* (q/height) 5/6)]
                            :on-click on-click-credits
+                           :color u/button-teal
                            :content-color qpu/white
                            :font "font/UbuntuMono-Regular.ttf")])
 

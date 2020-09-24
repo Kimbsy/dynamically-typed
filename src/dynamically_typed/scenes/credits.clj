@@ -23,9 +23,33 @@
       firework/pop-fireworks
       particle/clear-particles))
 
+(defn draw-header
+  []
+  (let [points [[-30  485]
+                [535  485]
+                [635  385]
+                [1200 385]
+                [1200 445]
+                [665  445]
+                [565  545]
+                [-30  545]]]
+    (qpu/fill u/player-pink)
+    (q/begin-shape)
+    (->> points
+         (map (fn [p] (map - p [0 100])))
+         (mapv #(apply q/vertex %)))
+    (q/end-shape)
+    (qpu/fill u/platform-blue)
+    (q/begin-shape)
+    (->> points
+         (map (fn [p] (map + [30 20] p)))
+         (mapv #(apply q/vertex %)))
+    (q/end-shape)))
+
 (defn draw-credits
   [state]
   (qpu/background u/dark-grey)
+  (draw-header)
   (qpu/fill qpu/black)
   (q/rect (* (q/width) 1/4) (* (q/height) 3/20)
           (* (q/width) 1/2) (* (q/height) 14/20))
@@ -42,7 +66,6 @@
                       :init-fn (fn [state]
                                  (sound/stop-music)
                                  (sound/loop-track :mellow)
-                                 (prn "MENU")
                                  (-> state
                                      (assoc-in [:scenes :intro] (intro/init))
                                      (assoc-in [:scenes :level-01] (level-01/init))
@@ -74,7 +97,9 @@
   []
   [(qpbutton/button-sprite "Back"
                            [(* (q/width) 1/2) (* (q/height) 5/6)]
-                           :on-click on-click-back)])
+                           :on-click on-click-back
+                           :color u/button-teal
+                           :content-color qpu/white)])
 
 (defn sprites
   []
@@ -99,9 +124,8 @@
 (defn commands
   []
   (celebrate-commands
-   ["yay" "woohoo" "terrific" "celebrate" "yes" "nice" "super" "wow"
-    "hooray" "excellent" "cool" "party" "amazing" "fantastic"
-    "awesome" "fun" "enjoy" "great" "lovely"]))
+   ["fun" "amazing" "nice" "wow" "great" "celebrate"
+    "fantastic" "excellent" "cool" "hooray"]))
 
 (defn key-pressed-fns
   []

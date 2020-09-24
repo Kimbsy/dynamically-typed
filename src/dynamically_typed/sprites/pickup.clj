@@ -39,7 +39,6 @@
 
 (defn activate-pickup
   [p _]
-  (prn "GOTCHA")
   (sound/pickup)
   (-> p
       (assoc :sprite-group :activated-pickups)

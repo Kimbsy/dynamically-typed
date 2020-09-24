@@ -50,7 +50,6 @@
 
 (defn reset-level
   [{:keys [current-scene] :as state}]
-  (prn "resetting level 2")
   (-> state
       (assoc-in [:scenes current-scene :sprites] (sprites))
       (assoc-in [:scenes current-scene :commands] (commands))

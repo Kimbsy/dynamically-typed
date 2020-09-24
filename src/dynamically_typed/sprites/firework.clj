@@ -28,8 +28,7 @@
   [{:keys [pos vel life] :as firework}]
   (if (pos? life)
     [firework]
-    (do (prn "BANG")
-        (particle/->particle-group pos vel))))
+    (particle/->particle-group pos vel)))
 
 (defn pop-fireworks
   [{:keys [current-scene] :as state}]
