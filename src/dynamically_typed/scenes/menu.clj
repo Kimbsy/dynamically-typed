@@ -20,7 +20,7 @@
 
 (defn on-click-play
   [state e]
-  (qpscene/transition state :level-01
+  (qpscene/transition state :intro
                       :transition-length 30
                       :init-fn (fn [state]
                                  (sound/stop-music)

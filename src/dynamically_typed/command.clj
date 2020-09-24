@@ -14,14 +14,20 @@
 (defn ->command
   [aliases on-complete
    & {:keys [display-delay
-             green-delay]
-      :or   {display-delay -1
-             green-delay   -1}}]
-  {:aliases       aliases
-   :on-complete   on-complete
-   :progression   (map ->progress aliases)
-   :display-delay display-delay
-   :green-delay   green-delay})
+             green-delay
+             particle-burst?
+             resetting?]
+      :or   {display-delay   -1
+             green-delay     -1
+             particle-burst? true
+             resetting?      true}}]
+  {:aliases         aliases
+   :on-complete     on-complete
+   :progression     (map ->progress aliases)
+   :display-delay   display-delay
+   :green-delay     green-delay
+   :particle-burst? particle-burst?
+   :resetting?      resetting?})
 
 (defn complete?
   [{:keys [progression]}]
@@ -41,40 +47,55 @@
          (mapv #(update-progress % k) progression)))
 
 (defn particle-burst
-  [{:keys [current-scene] :as state} command-key]
-  (let [ordered-commands (sort-by first (get-in state [:scenes current-scene :commands]))
-        i                (->> ordered-commands
-                              (keep-indexed #(when (#{command-key} (first %2)) %1))
-                              first)
-        y-offset         (+ 35 (* i 35))
-        x-offset         (+ 20 (* 12.5 (/ (count (name command-key)) 2)))
-        sprites          (get-in state [:scenes current-scene :sprites])]
-    (-> state
-        (assoc-in [:scenes current-scene :sprites]
-                  (concat sprites
-                          (particle/->particle-group [x-offset y-offset]
-                                                     [0 0]
-                                                     :color u/light-green
-                                                     :count 15
-                                                     :life 100))))))
+  [{:keys [current-scene] :as state} command-key
+   & {:keys [particle-burst?] :or {particle-burst? true}}]
+  (if particle-burst?
+    (let [ordered-commands (sort-by first (get-in state [:scenes current-scene :commands]))
+          i                (->> ordered-commands
+                                (keep-indexed #(when (#{command-key} (first %2)) %1))
+                                first)
+          y-offset         (+ 35 (* i 35))
+          x-offset         (+ 20 (* 12.5 (/ (count (name command-key)) 2)))
+          sprites          (get-in state [:scenes current-scene :sprites])]
+      (-> state
+          (assoc-in [:scenes current-scene :sprites]
+                    (concat sprites
+                            (particle/->particle-group [x-offset y-offset]
+                                                       [0 0]
+                                                       :color u/light-green
+                                                       :count 15
+                                                       :life 50)))))
+    state))
 
 (defn reset-command
   [{:keys [current-scene] :as state}
    command-key
-   {:keys [aliases on-complete] :as command}]
+   {:keys [aliases on-complete resetting?] :as command}
+   & {:keys [particle-burst?] :or {particle-burst? true}}]
   (-> state
-      (particle-burst command-key)
+      (particle-burst command-key :particle-burst? particle-burst?)
       (assoc-in [:scenes current-scene :commands command-key]
-                (-> (->command aliases on-complete)
-                    (assoc :green-delay 10)))))
+                (if resetting?
+                  (-> (->command aliases on-complete
+                                 :particle-burst? particle-burst?
+                                 :resetting? resetting?)
+                      (assoc :green-delay 10))
+                  (-> (->command aliases on-complete
+                                 :particle-burst? particle-burst?
+                                 :resetting? resetting?)
+                      (assoc :green-delay 10)
+                      (assoc :kill-delay 10))))))
 
 (defn apply-on-completes
   [{:keys [current-scene] :as state}]
-  (reduce (fn [acc [command-key {:keys [on-complete] :as command}]]
+  (reduce (fn [acc [command-key {:keys [on-complete particle-burst? resetting?]
+                                 :as   command}]]
             (if (complete? command)
               (-> acc
                   on-complete
-                  (reset-command command-key command))
+                  (reset-command command-key command
+                                 :particle-burst? particle-burst?
+                                 :resetting? resetting?))
               acc))
           state
           (get-in state [:scenes current-scene :commands])))
@@ -134,15 +155,28 @@
          (sort-by first)
          (mapv #(draw-command %1 %2 default-font) (range)))))
 
+(defn decay-kill-delay
+  [{:keys [kill-delay] :as command}]
+  (if (some? kill-delay)
+    (update command :kill-delay dec)
+    command))
+
 (defn decay-display-delays
-  [{:keys [current-scene] :as state}]
+  [{:keys [current-scene] :as state} & {:keys [sound?] :or {sound? true}}]
   (update-in state [:scenes current-scene :commands]
              (fn [commands]
-               (into {}
-                     (map (fn [[k {:keys [display-delay] :as c}]]
-                            (when (zero? display-delay)
-                              (sound/new-command))
-                            [k (-> c
-                                   (update :display-delay dec)
-                                   (update :green-delay dec))])
-                          commands)))))
+               (-> (into {}
+                         (map (fn [[k {:keys [display-delay resetting?] :as c}]]
+                                (when (and sound? (zero? display-delay))
+                                  (sound/new-command))
+                                (let [new-c (-> c
+                                                (update :display-delay dec)
+                                                (update :green-delay dec)
+                                                decay-kill-delay)
+                                      kill-delay (:kill-delay new-c)]
+                                  (if (and (some? kill-delay)
+                                           (neg? kill-delay))
+                                    [:empty nil]
+                                    [k new-c])))
+                              commands))
+                   (dissoc :empty)))))

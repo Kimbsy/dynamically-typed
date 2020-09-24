@@ -1,5 +1,6 @@
 (ns dynamically-typed.scenes.credits
   (:require [dynamically-typed.command :as command]
+            [dynamically-typed.scenes.intro :as intro]
             [dynamically-typed.scenes.level-01 :as level-01]
             [dynamically-typed.scenes.level-02 :as level-02]
             [dynamically-typed.scenes.level-03 :as level-03]
@@ -43,6 +44,7 @@
                                  (sound/loop-track :mellow)
                                  (prn "MENU")
                                  (-> state
+                                     (assoc-in [:scenes :intro] (intro/init))
                                      (assoc-in [:scenes :level-01] (level-01/init))
                                      (assoc-in [:scenes :level-02] (level-02/init))
                                      (assoc-in [:scenes :level-03] (level-03/init))

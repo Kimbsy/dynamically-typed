@@ -29,18 +29,20 @@
 *** gonna need to make command display be in terms of font dimensions, not hard coded
 ** DONE command completion animation
 ** DONE reset should be a command
-** TODO clean up print statements
-** TODO design teaching reset level
-** TODO game intro
+** DONE design teaching reset
+** DONE game intro
+** TODO prettify menu scene
+** TODO prettify platforms
 ** TODO game end
+** TODO clean up print statements
 ** TODO player visibly changing as levels progress
 ** TODO quit to menu command
-** TODO stop command
-** TODO special mid-air double jump zones?
-** TODO anchor zones for grabbing
+** TODO design more levels
+*** TODO stop command
+*** TODO special mid-air double jump zones?
+*** TODO anchor zones for grabbing
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
-** TODO prettify menu scene
 ** TODO sound effects
 *** DONE jump
 *** DONE dash
@@ -54,7 +56,6 @@
 *** some files seem to crash the sound engine
 *** maybe just keep making them until they work?
 *** are they working across machines?
-** TODO design more levels
 ** TODO kepress animation underlay thingy
 ** TODO graphics settings? (option to remove animation underlay thingy)
 ** TODO resizable screen
@@ -74,3 +75,4 @@
 ** TODO scene transition delay (so we can see buttons unpress)
 ** TODO a generalised way of creating delayed actions
 ** TODO a way of defining and applying tweens to sprites
+** TODO a way of defining coeffects for the state in colliders

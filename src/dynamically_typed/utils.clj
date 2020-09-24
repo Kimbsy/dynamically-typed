@@ -2,7 +2,7 @@
   (:require [quip.scene :as qpscene]))
 
 (def dark-grey [30 30 30])
-(def light-blue [75 75 250])
+(def light-blue [100 100 255])
 (def light-red [250 75 75])
 (def light-yellow [255 255 75])
 (def light-green [75 250 75])
@@ -87,7 +87,8 @@
   ([target-scene init-fn]
    (fn [{:keys [current-scene end-level-timeout] :as state}]
      (let [sprites (get-in state [:scenes current-scene :sprites])
-           goal    (first (filter #(#{:goal} (:sprite-group %)) sprites))]
+           goals   (filter #(#{:goal} (:sprite-group %)) sprites)
+           goal    (first goals)]
        (if (#{:complete} (:current-animation goal))
          (if (nil? end-level-timeout)
            (assoc state :end-level-timeout 100)

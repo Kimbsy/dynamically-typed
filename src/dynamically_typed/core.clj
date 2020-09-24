@@ -1,6 +1,7 @@
 (ns dynamically-typed.core
   (:gen-class)
   (:require [dynamically-typed.scenes.credits :as credits]
+            [dynamically-typed.scenes.intro :as intro]
             [dynamically-typed.scenes.level-01 :as level-01]
             [dynamically-typed.scenes.level-02 :as level-02]
             [dynamically-typed.scenes.level-03 :as level-03]
@@ -15,11 +16,13 @@
 (defn setup
   []
   (sound/loop-track :mellow)
-  {:default-font (q/create-font "font/UbuntuMono-Regular.ttf" qpu/default-text-size)})
+  {:default-font (q/create-font "font/UbuntuMono-Regular.ttf" qpu/default-text-size)
+   :giant-font   (q/create-font "font/UbuntuMono-Regular.ttf" 250)})
 
 (defn init-scenes
   []
   {:menu     (menu/init)
+   :intro    (intro/init)
    :level-01 (level-01/init)
    :level-02 (level-02/init)
    :level-03 (level-03/init)
