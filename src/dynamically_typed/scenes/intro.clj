@@ -50,11 +50,35 @@
   (qpscene/draw-scene-sprites state)
   (command/draw-commands state))
 
+(defn fading-square
+  [pos w h]
+  {:sprite-group :fading-squares
+   :uuid         (java.util.UUID/randomUUID)
+   :pos          pos
+   :w            w
+   :h            h
+   :update-fn    (fn [{:keys [fade-delay] :as s}]
+                   (if (neg? fade-delay)
+                     (update s :alpha #(max 0 (dec %)))
+                     (update s :fade-delay dec)))
+   :draw-fn      (fn [{[x y] :pos w :w h :h alpha :alpha}]
+                   (qpu/fill (conj u/dark-grey alpha))
+                   (q/rect (- x (/ w 2))
+                           (- y (/ h 2))
+                           w h))
+   :fade-delay 150
+   :alpha 255})
+
 (defn sprites
   []
   [(qpsprite/text-sprite "(press)"
-                         [(- (* (q/width) 1/2) 120) (- (* (q/height) 1/2) 100)]
+                         [(- (* (q/width) 1/2) 120)
+                          (- (* (q/height) 1/2) 100)]
                          :color qpu/white)
+   (fading-square [(- (* (q/width) 1/2) 120)
+                   (- (* (q/height) 1/2) 100)]
+                  400
+                  100)
    (goal/->goal [100 950])
    (player/init-player [100 1050])])
 
@@ -66,11 +90,12 @@
                                    player/jump
                                    :green-delay 50))
       (assoc-in [:scenes current-scene :sprites]
-                [(-> (player/init-player [100 150])
+                [(-> (player/init-player [100 550])
                      (assoc :landed true))
                  (goal/->goal [100 718])
                  (platform/floor)])
       (assoc-in [:scenes current-scene :draw-fn] draw-completed-intro)
+      (command/particle-burst :jump)
       player/jump))
 
 (defn pressed-m
