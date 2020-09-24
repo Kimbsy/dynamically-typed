@@ -56,9 +56,9 @@
 
 (defn commands
   []
-  {:jump  (command/->command ["jump"] player/jump)
-   :dash  (command/->command ["dash"] player/dash)
-   :turn  (command/->command ["turn"] player/turn)})
+  {:jump  (command/->command ["jump"] player/jump :green-delay 40)
+   :dash  (command/->command ["dash"] player/dash :green-delay 20)
+   :turn  (command/->command ["turn"] player/turn :green-delay 60)})
 
 (defn colliders
   []

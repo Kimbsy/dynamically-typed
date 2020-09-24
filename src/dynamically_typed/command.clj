@@ -80,11 +80,12 @@
                                  :particle-burst? particle-burst?
                                  :resetting? resetting?)
                       (assoc :green-delay 10))
-                  (-> (->command aliases on-complete
-                                 :particle-burst? particle-burst?
-                                 :resetting? resetting?)
-                      (assoc :green-delay 10)
-                      (assoc :kill-delay 10))))))
+                  (merge command
+                         (-> (->command aliases on-complete
+                                        :particle-burst? particle-burst?
+                                        :resetting? resetting?)
+                             (assoc :green-delay 10)
+                             (assoc :kill-delay 10)))))))
 
 (defn apply-on-completes
   [{:keys [current-scene] :as state}]

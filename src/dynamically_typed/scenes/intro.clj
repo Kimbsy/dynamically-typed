@@ -33,7 +33,8 @@
 
 (defn draw-big-letter-commands
   [{:keys [current-scene giant-font] :as state}]
-  (let [commands (get-in state [:scenes current-scene :commands])]
+  (let [commands (filter #(#{:huge} (:size (second %)))
+                         (get-in state [:scenes current-scene :commands]))]
     (->> commands
          (mapv #(draw-big-letter-command %1 %2 giant-font) (range)))))
 
@@ -43,10 +44,16 @@
   (qpscene/draw-scene-sprites state)
   (draw-big-letter-commands state))
 
+(defn draw-completed-intro
+  [state]
+  (qpu/background u/dark-grey)
+  (qpscene/draw-scene-sprites state)
+  (command/draw-commands state))
+
 (defn sprites
   []
   [(qpsprite/text-sprite "(press)"
-                         [(- (* (q/width) 1/2) 100) (- (* (q/height) 1/2) 100)]
+                         [(- (* (q/width) 1/2) 120) (- (* (q/height) 1/2) 100)]
                          :color qpu/white)
    (goal/->goal [100 950])
    (player/init-player [100 1050])])
@@ -54,46 +61,55 @@
 (defn pressed-p
   [{:keys [current-scene] :as state}]
   (-> state
+      (assoc-in [:scenes current-scene :commands :jump]
+                (command/->command ["jump"]
+                                   player/jump
+                                   :green-delay 50))
       (assoc-in [:scenes current-scene :sprites]
                 [(-> (player/init-player [100 150])
                      (assoc :landed true))
                  (goal/->goal [100 718])
                  (platform/floor)])
+      (assoc-in [:scenes current-scene :draw-fn] draw-completed-intro)
       player/jump))
 
 (defn pressed-m
   [{:keys [current-scene] :as state}]
   (-> state
       (assoc-in [:scenes current-scene :commands]
-                {:p (command/->command ["p"] pressed-p
-                                       :display-delay 100
-                                       :particle-burst? false
-                                       :resetting? false)})))
+                {:p (-> (command/->command ["p"] pressed-p
+                                           :display-delay 100
+                                           :particle-burst? false
+                                           :resetting? false)
+                        (assoc :size :huge))})))
 
 (defn pressed-u
   [{:keys [current-scene] :as state}]
   (-> state
       (assoc-in [:scenes current-scene :commands]
-                {:m (command/->command ["m"] pressed-m
-                                       :display-delay 100
-                                       :particle-burst? false
-                                       :resetting? false)})))
+                {:m (-> (command/->command ["m"] pressed-m
+                                           :display-delay 100
+                                           :particle-burst? false
+                                           :resetting? false)
+                        (assoc :size :huge))})))
 
 (defn pressed-j
   [{:keys [current-scene] :as state}]
   (-> state
       (assoc-in [:scenes current-scene :commands]
-                {:u (command/->command ["u"] pressed-u
-                                       :display-delay 100
-                                       :particle-burst? false
-                                       :resetting? false)})))
+                {:u (-> (command/->command ["u"] pressed-u
+                                           :display-delay 100
+                                           :particle-burst? false
+                                           :resetting? false)
+                        (assoc :size :huge))})))
 
 (defn commands
   []
-  {:j (command/->command ["j"] pressed-j
-                         :display-delay 100
-                         :particle-burst? false
-                         :resetting? false)})
+  {:j (-> (command/->command ["j"] pressed-j
+                             :display-delay 100
+                             :particle-burst? false
+                             :resetting? false)
+          (assoc :size :huge))})
 
 (defn key-pressed-fns
   []
