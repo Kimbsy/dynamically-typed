@@ -20,8 +20,8 @@
 
 (defn play
   [sound]
-  (let [audio-file (java.io.File. (str "resources/sound/" sound))
-        audio-stream (AudioSystem/getAudioInputStream audio-file)
+  (let [input-stream (io/input-stream (io/resource (str "sound/" sound)))
+        audio-stream (AudioSystem/getAudioInputStream input-stream)
         audio-format (.getFormat audio-stream)
         audio-info (DataLine$Info. Clip audio-format)
         audio-clip (cast Clip (AudioSystem/getLine audio-info))]
