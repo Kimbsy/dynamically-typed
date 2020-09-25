@@ -36,7 +36,11 @@
 ** DONE prettify platforms
 ** DONE design more levels
 ** DONE dive command
-** TODO game end
+** DONE SORT THAT SOUND CRASHING BUG
+*** some files seem to crash the sound engine
+*** maybe just keep making them until they work?
+*** are they working across machines?
+** DONE game end
 ** TODO player visibly changing as levels progress
 ** TODO quit to menu command
 ** TODO command failed animation
@@ -50,10 +54,6 @@
 *** DONE dive
 *** TODO grab
 *** TODO firework pop?
-** TODO SORT THAT SOUND CRASHING BUG
-*** some files seem to crash the sound engine
-*** maybe just keep making them until they work?
-*** are they working across machines?
 ** TODO kepress animation underlay thingy
 ** TODO graphics settings? (option to remove animation underlay thingy)
 ** TODO resizable screen
