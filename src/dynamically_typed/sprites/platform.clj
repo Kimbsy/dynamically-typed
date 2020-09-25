@@ -1,37 +1,46 @@
 (ns dynamically-typed.sprites.platform
-  (:require [quil.core :as q]
+  (:require [dynamically-typed.utils :as u]
+            [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.sprite :as qpsprite]
             [quip.utils :as qpu]))
 
 (defn draw-platform
-  [{[x y] :pos w :w h :h}]
+  [{[x y] :pos w :w h :h edge? :edge?}]
   (qpu/fill qpu/grey)
-  (q/no-stroke)
+  (when edge?
+    (q/stroke-weight 2)
+    (qpu/stroke u/platform-blue))
   (q/rect (- x (/ w 2))
           (- y (/ h 2))
           w
-          h))
+          h
+          10)
+  (q/stroke-weight 1)
+  (q/no-stroke))
 
 (defn ->platform
-  [pos w h]
+  [pos w h
+   & {:keys [edge?]
+      :or   {edge? true}}]
   {:sprite-group :platforms
    :uuid         (java.util.UUID/randomUUID)
    :pos          pos
    :rotation     0
    :w            w
    :h            h
+   :edge?        edge?
    :animated?    false
    :static?      true
    :update-fn    identity
    :draw-fn      draw-platform
    :bounds-fn    qpsprite/default-bounding-poly})
 
-(defn floor [] (->platform [600 775] 1200 50))
-(defn world-top [] (->platform [600 0] 1200 2))
-(defn world-bottom [] (->platform [600 800] 1200 2))
-(defn world-left [] (->platform [0 400] 2 800))
-(defn world-right [] (->platform [1200 400] 2 800))
+(defn floor [] (->platform [600 775] 1300 50 :edge? true))
+(defn world-top [] (->platform [600 0] 1200 2 :edge? false))
+(defn world-bottom [] (->platform [600 800] 1200 2 :edge? false))
+(defn world-left [] (->platform [0 400] 2 800 :edge? false))
+(defn world-right [] (->platform [1200 400] 2 800 :edge? false))
 
 (defn world-bounds
   []

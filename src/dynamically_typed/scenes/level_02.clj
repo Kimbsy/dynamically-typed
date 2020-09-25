@@ -5,6 +5,7 @@
             [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
+            [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]
             [quip.utils :as qpu]))
@@ -23,12 +24,16 @@
   [state]
   (qpu/background u/dark-grey)
   (qpscene/draw-scene-sprites state)
-  (command/draw-commands state))
+  (command/draw-commands state)
+
+  ;; hide platform seam
+  (qpu/fill qpu/grey)
+  (q/rect 602 740 1000 100))
 
 (defn init-platforms
   []
-  [(platform/floor)
-   (platform/->platform [1200 700] 1200 100)])
+  [(platform/->platform [1200 710] 1200 120)
+   (platform/floor)])
 
 (defn sprites
   []
