@@ -1,4 +1,4 @@
-(ns dynamically-typed.scenes.level-03
+(ns dynamically-typed.scenes.level-06
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.particle :as particle]
@@ -21,7 +21,7 @@
       qpscene/update-scene-sprites
       particle/clear-particles
       command/decay-display-delays
-      ((u/check-victory-fn :level-04))))
+      ((u/check-victory-fn :level-07))))
 
 (defn draw-level
   [state]
@@ -33,15 +33,13 @@
   []
   [(platform/world-top)
    (platform/world-left)
-   (platform/world-right)
-   (platform/->platform [0 400] 800 50)
-   (platform/->platform [0 500] 1000 50)
-   (platform/->platform [1200 500] 1000 50)])
+   (platform/->platform [0 300] 1200 50)
+   (platform/->platform [0 775] 1200 50)])
 
 (defn sprites
   []
-  (concat [(player/init-player [100 450])
-           (goal/->goal [1125 443])
+  (concat [(player/init-player)
+           (goal/->goal [75 718])
            (pickup/->pickup [800 850]
                             {:reset (command/->command ["reset"]
                                                        reset-level
@@ -51,8 +49,9 @@
 
 (defn commands
   [green-delay?]
-  {:jump (command/->command ["jump"] player/jump :green-delay (if green-delay? 40 0))
-   :dash (command/->command ["dash"] player/dash :green-delay (if green-delay? 20 0))})
+  {:jump  (command/->command ["jump"] player/jump :green-delay (if green-delay? 40 0))
+   :dash  (command/->command ["dash"] player/dash :green-delay (if green-delay? 20 0))
+   :turn  (command/->command ["turn"] player/turn :green-delay (if green-delay? 60 0))})
 
 (defn colliders
   []

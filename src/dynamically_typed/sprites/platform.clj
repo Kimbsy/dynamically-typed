@@ -36,7 +36,7 @@
    :draw-fn      draw-platform
    :bounds-fn    qpsprite/default-bounding-poly})
 
-(defn floor [] (->platform [600 775] 1300 50 :edge? true))
+(defn floor [] (->platform [600 775] 1300 50))
 (defn world-top [] (->platform [600 0] 1200 2 :edge? false))
 (defn world-bottom [] (->platform [600 800] 1200 2 :edge? false))
 (defn world-left [] (->platform [0 400] 2 800 :edge? false))

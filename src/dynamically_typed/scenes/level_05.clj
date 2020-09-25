@@ -1,6 +1,5 @@
 (ns dynamically-typed.scenes.level-05
   (:require [dynamically-typed.command :as command]
-            [dynamically-typed.sound :as sound]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.particle :as particle]
             [dynamically-typed.sprites.pickup :as pickup]
@@ -23,10 +22,7 @@
       qpscene/update-scene-sprites
       particle/clear-particles
       command/decay-display-delays
-      ((u/check-victory-fn :credits (fn [state]
-                                      (sound/stop-music)
-                                      (sound/loop-track :glitter)
-                                      state)))))
+      ((u/check-victory-fn :level-06))))
 
 (defn draw-level
   [state]
@@ -36,7 +32,7 @@
 
   ;; hide platform seam
   (qpu/fill qpu/grey)
-  (q/rect 699 551 100 1000))
+  (q/rect 698 552 100 1000))
 
 (defn init-platforms
   []

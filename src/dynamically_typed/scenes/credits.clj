@@ -3,9 +3,12 @@
             [dynamically-typed.scenes.intro :as intro]
             [dynamically-typed.scenes.level-01 :as level-01]
             [dynamically-typed.scenes.level-02 :as level-02]
+            [dynamically-typed.scenes.level-02-b :as level-02-b]
             [dynamically-typed.scenes.level-03 :as level-03]
             [dynamically-typed.scenes.level-04 :as level-04]
             [dynamically-typed.scenes.level-05 :as level-05]
+            [dynamically-typed.scenes.level-06 :as level-06]
+            [dynamically-typed.scenes.level-07 :as level-07]
             [dynamically-typed.sound :as sound]
             [dynamically-typed.sprites.firework :as firework]
             [dynamically-typed.sprites.particle :as particle]
@@ -70,9 +73,12 @@
                                      (assoc-in [:scenes :intro] (intro/init))
                                      (assoc-in [:scenes :level-01] (level-01/init))
                                      (assoc-in [:scenes :level-02] (level-02/init))
+                                     (assoc-in [:scenes :level-02-b] (level-02-b/init))
                                      (assoc-in [:scenes :level-03] (level-03/init))
                                      (assoc-in [:scenes :level-04] (level-04/init))
                                      (assoc-in [:scenes :level-05] (level-05/init))
+                                     (assoc-in [:scenes :level-06] (level-06/init))
+                                     (assoc-in [:scenes :level-07] (level-07/init))
                                      (u/unclick-all-buttons)))))
 
 (defn text-sprites

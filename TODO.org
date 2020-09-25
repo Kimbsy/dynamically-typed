@@ -33,14 +33,12 @@
 ** DONE game intro
 ** DONE prettify menu scene
 ** DONE clean up print statements
-** TODO prettify platforms
+** DONE prettify platforms
+** DONE design more levels
+** DONE dive command
 ** TODO game end
 ** TODO player visibly changing as levels progress
 ** TODO quit to menu command
-** TODO design more levels
-*** TODO stop command
-*** TODO special mid-air double jump zones?
-*** TODO anchor zones for grabbing
 ** TODO command failed animation
 *** for if you grab when you shouldn't or jump in mid air
 ** TODO sound effects
@@ -49,7 +47,7 @@
 *** DONE turn
 *** DONE level complete
 *** DONE new command
-*** TODO stop
+*** DONE dive
 *** TODO grab
 *** TODO firework pop?
 ** TODO SORT THAT SOUND CRASHING BUG

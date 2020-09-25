@@ -16,6 +16,7 @@
 (def sound-effects {:jump ["sound/jump2.mp3"]
                     :dash ["sound/dash.mp3"]
                     :turn ["sound/turn.mp3"]
+                    :dive ["sound/dive.mp3"]
                     :pickup ["sound/pickup.mp3"]
                     :finish ["sound/finish.mp3"]
                     :new-command ["sound/new-command.mp3"]})
@@ -64,6 +65,10 @@
 (defn turn
   []
   (play-sound-effect :turn))
+
+(defn dive
+  []
+  (play-sound-effect :dive))
 
 (defn pickup
   []

@@ -1,4 +1,4 @@
-(ns dynamically-typed.scenes.level-02
+(ns dynamically-typed.scenes.level-02-b
   (:require [dynamically-typed.command :as command]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.particle :as particle]
@@ -18,7 +18,7 @@
       qpscene/update-scene-sprites
       particle/clear-particles
       command/decay-display-delays
-      ((u/check-victory-fn :level-02-b))))
+      ((u/check-victory-fn :level-03))))
 
 (defn draw-level
   [state]
@@ -26,19 +26,23 @@
   (qpscene/draw-scene-sprites state)
   (command/draw-commands state)
 
-  ;; hide platform seam
+  ;; hide platform seams
   (qpu/fill qpu/grey)
-  (q/rect 602 740 1000 100))
+  (q/rect 602 738 1000 100)
+  (q/rect 802 638 1000 100)
+  (q/rect 1002 538 1000 100))
 
 (defn init-platforms
   []
-  [(platform/->platform [1200 710] 1200 120)
+  [(platform/->platform [1200 490] 400 120)
+   (platform/->platform [1200 600] 800 120)
+   (platform/->platform [1200 710] 1200 120)
    (platform/floor)])
 
 (defn sprites
   []
   (concat [(player/init-player)
-           (goal/->goal [1125 618])]
+           (goal/->goal [1125 398])]
           (init-platforms)
           (platform/world-bounds)))
 

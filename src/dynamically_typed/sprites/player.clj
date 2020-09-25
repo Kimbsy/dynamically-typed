@@ -67,11 +67,11 @@
                     [:scenes current-scene :sprites]
                     (concat non-players
                             [(-> player
-                                  (update :vel (fn [[vx vy]] [vx (- vy 5)]))
-                                  (update :pos (fn [[x y]] [x (- y 10)]))
-                                  (assoc :landed false)
-                                  (qpsprite/set-animation :jump)
-                                  (assoc :animation-timer 30))]
+                                 (update :vel (fn [[vx vy]] [vx (- vy 5)]))
+                                 (update :pos (fn [[x y]] [x (- y 10)]))
+                                 (assoc :landed false)
+                                 (qpsprite/set-animation :jump)
+                                 (assoc :animation-timer 30))]
                             (particle/->particle-group (:pos player)
                                                        (:vel player)
                                                        :color u/player-pink
@@ -117,3 +117,24 @@
                             (update :vel u/flip-x)
                             (qpsprite/set-animation :turn)
                             (assoc :animation-timer 12)))))))
+
+(defn dive
+  [{:keys [current-scene] :as state}]
+  (let [sprites     (get-in state [:scenes current-scene :sprites])
+        non-players (remove #(#{:player} (:sprite-group %)) sprites)
+        player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
+    (if-not (:landed player)
+      (do (sound/dive)
+          (assoc-in state
+                    [:scenes current-scene :sprites]
+                    (concat non-players
+                            [(-> player
+                                 (update :vel (fn [[vx vy]] [0 (+ vy 5)]))
+                                 (qpsprite/set-animation :jump)
+                                 (assoc :animation-timer 30))]
+                            (particle/->particle-group (:pos player)
+                                                       (:vel player)
+                                                       :color u/player-pink
+                                                       :count 15
+                                                       :life 150))))
+      state)))
