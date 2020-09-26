@@ -20,7 +20,7 @@
       ((u/check-victory-fn :level-01))))
 
 (defn draw-big-letter-command
-  [i [command-key {:keys [display-delay green-delay] :as command}] font]
+  [[command-key {:keys [display-delay green-delay] :as command}] font]
   (when (neg? display-delay)
     (let [complete  (apply str (:complete (first (:progression command))))
           remaining (apply str (:remaining (first (:progression command))))]
@@ -29,18 +29,26 @@
       (q/text complete (/ (q/width) 2) (/ (q/height) 2))
       (when (neg? green-delay)
         (qpu/fill qpu/white))
-      (q/text remaining (/ (q/width) 2) (/ (q/height) 2)))))
+      (q/text remaining (/ (q/width) 2) (- (/ (q/height) 2) 90)))))
 
 (defn draw-big-letter-commands
   [{:keys [current-scene giant-font] :as state}]
   (let [commands (filter #(#{:huge} (:size (second %)))
                          (get-in state [:scenes current-scene :commands]))]
     (->> commands
-         (mapv #(draw-big-letter-command %1 %2 giant-font) (range)))))
+         (mapv #(draw-big-letter-command % giant-font)))))
 
 (defn draw-intro
-  [state]
+  [{:keys [default-font] :as state}]
   (qpu/background u/dark-grey)
+
+  ;; This should really be a text sprite, but something goes wrong
+  ;; with displaying regular commands afterwards in windows, probably
+  ;; due to the text offsets that get applied.
+  (q/text-font default-font)
+  (qpu/fill qpu/white)
+  (q/text "(press)" (- (* (q/width) 1/2) 120) (- (* (q/height) 1/2) 100))
+
   (qpscene/draw-scene-sprites state)
   (draw-big-letter-commands state))
 
@@ -71,11 +79,7 @@
 
 (defn sprites
   []
-  [(qpsprite/text-sprite "(press)"
-                         [(- (* (q/width) 1/2) 120)
-                          (- (* (q/height) 1/2) 100)]
-                         :color qpu/white)
-   (fading-square [(- (* (q/width) 1/2) 120)
+  [(fading-square [(- (* (q/width) 1/2) 120)
                    (- (* (q/height) 1/2) 100)]
                   400
                   100)

@@ -79,7 +79,7 @@
                                      (assoc-in [:scenes :level-05] (level-05/init))
                                      (assoc-in [:scenes :level-06] (level-06/init))
                                      (assoc-in [:scenes :level-07] (level-07/init))
-                                     (u/unclick-all-buttons)))))
+                                     u/unclick-all-buttons))))
 
 (defn text-sprites
   []
