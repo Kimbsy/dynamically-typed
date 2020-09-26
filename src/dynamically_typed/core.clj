@@ -24,17 +24,17 @@
 
 (defn init-scenes
   []
-  {:menu     (menu/init)
-   :intro    (intro/init)
-   :level-01 (level-01/init)
-   :level-02 (level-02/init)
+  {:menu       (menu/init)
+   :intro      (intro/init)
+   :level-01   (level-01/init)
+   :level-02   (level-02/init)
    :level-02-b (level-02-b/init)
-   :level-03 (level-03/init)
-   :level-04 (level-04/init)
-   :level-05 (level-05/init)
-   :level-06 (level-06/init)
-   :level-07 (level-07/init)
-   :credits  (credits/init)})
+   :level-03   (level-03/init)
+   :level-04   (level-04/init)
+   :level-05   (level-05/init)
+   :level-06   (level-06/init)
+   :level-07   (level-07/init)
+   :credits    (credits/init)})
 
 (defn cleanup
   [state]

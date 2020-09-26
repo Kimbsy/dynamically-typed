@@ -165,18 +165,17 @@
   [{:keys [current-scene] :as state} & {:keys [sound?] :or {sound? true}}]
   (update-in state [:scenes current-scene :commands]
              (fn [commands]
-               (-> (into {}
-                         (map (fn [[k {:keys [display-delay resetting?] :as c}]]
-                                (when (and sound? (zero? display-delay))
-                                  (sound/new-command))
-                                (let [new-c (-> c
-                                                (update :display-delay dec)
-                                                (update :green-delay dec)
-                                                decay-kill-delay)
-                                      kill-delay (:kill-delay new-c)]
-                                  (if (and (some? kill-delay)
-                                           (neg? kill-delay))
-                                    [:empty nil]
-                                    [k new-c])))
-                              commands))
-                   (dissoc :empty)))))
+               (into {}
+                     (map (fn [[k {:keys [display-delay resetting?] :as c}]]
+                            (when (and sound? (zero? display-delay))
+                              (sound/new-command))
+                            (let [new-c (-> c
+                                            (update :display-delay dec)
+                                            (update :green-delay dec)
+                                            decay-kill-delay)
+                                  kill-delay (:kill-delay new-c)]
+                              (if (and (some? kill-delay)
+                                       (neg? kill-delay))
+                                nil
+                                [k new-c])))
+                          commands)))))
