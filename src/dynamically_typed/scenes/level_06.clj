@@ -75,9 +75,7 @@
 
 (defn key-pressed-fns
   []
-  [command/handle-keypress
-   command/clear
-   (u/reset-handler reset-level)])
+  [command/handle-keypress])
 
 (defn init
   []

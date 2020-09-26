@@ -135,8 +135,7 @@
 
 (defn key-pressed-fns
   []
-  [command/handle-keypress
-   command/clear])
+  [command/handle-keypress])
 
 (defn init
   []

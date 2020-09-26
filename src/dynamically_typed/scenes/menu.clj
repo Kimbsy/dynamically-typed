@@ -15,8 +15,6 @@
 
 (defn draw-header
   []
-  ;; (qpu/fill qpu/white)
-  ;; (q/rect 270 90 660 140)
   (let [points [[-30 140]
                 [535 140]
                 [635 38]
