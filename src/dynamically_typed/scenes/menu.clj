@@ -89,15 +89,15 @@
                            :color u/button-teal
                            :content-color qpu/white
                            :font "font/UbuntuMono-Regular.ttf")
-   (qpbutton/button-sprite "Quit"
+   (qpbutton/button-sprite "Credits"
                            [(* (q/width) 1/2) (* (q/height) 2/3)]
-                           :on-click on-click-quit
+                           :on-click on-click-credits
                            :color u/button-teal
                            :content-color qpu/white
                            :font "font/UbuntuMono-Regular.ttf")
-   (qpbutton/button-sprite "Credits"
+   (qpbutton/button-sprite "Quit"
                            [(* (q/width) 1/2) (* (q/height) 5/6)]
-                           :on-click on-click-credits
+                           :on-click on-click-quit
                            :color u/button-teal
                            :content-color qpu/white
                            :font "font/UbuntuMono-Regular.ttf")])

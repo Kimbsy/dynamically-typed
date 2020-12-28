@@ -7,7 +7,7 @@
 (defonce ^:dynamic *music* (atom nil))
 
 (def tracks {:mellow "music/Blippy Trance.wav"
-             :driving "music/Getting it Done.wav"
+             :driving "music/8bit Romance Loopable.wav"
              :glitter "music/Glitter Blast.wav"})
 
 (def sound-effects {:jump "jump2.wav"
@@ -19,15 +19,19 @@
                     :new-command "new-command.wav"})
 
 (defn play
-  [sound]
-  (let [input-stream (io/input-stream (io/resource (str "sound/" sound)))
-        audio-stream (AudioSystem/getAudioInputStream input-stream)
-        audio-format (.getFormat audio-stream)
-        audio-info (DataLine$Info. Clip audio-format)
-        audio-clip (cast Clip (AudioSystem/getLine audio-info))]
-    (.open audio-clip audio-stream)
-    (.start audio-clip)
-    audio-clip))
+  ([sound]
+   (play sound false))
+  ([sound loop?]
+   (let [input-stream (io/input-stream (io/resource (str "sound/" sound)))
+         audio-stream (AudioSystem/getAudioInputStream input-stream)
+         audio-format (.getFormat audio-stream)
+         audio-info (DataLine$Info. Clip audio-format)
+         audio-clip (cast Clip (AudioSystem/getLine audio-info))]
+     (.open audio-clip audio-stream)
+     (when loop?
+       (.loop audio-clip Clip/LOOP_CONTINUOUSLY))
+     (.start audio-clip)
+     audio-clip)))
 
 (defn stop
   [clip]
@@ -41,7 +45,8 @@
   [track-key]
   (when @*music*
     (stop-music))
-  (reset! *music* (play (track-key tracks))))
+  (reset! *music* (play (track-key tracks)
+                        true)))
 
 (defn play-sound-effect
   [sound-effect-key]

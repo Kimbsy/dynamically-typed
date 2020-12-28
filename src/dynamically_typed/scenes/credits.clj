@@ -85,17 +85,27 @@
   []
   [(qpsprite/text-sprite "A game by Kimbsy"
                          [(* (q/width) 1/2)
-                          (* (q/height) 6/20)]
+                          (* (q/height) 11/40)]
                          :color qpu/black
                          :font "font/UbuntuMono-Regular.ttf")
-   (qpsprite/text-sprite "Music by Kevin MacLeod (incompetech.com)"
+   (qpsprite/text-sprite "Music by PJ Kimber"
+                         [(* (q/width) 1/2)
+                          (* (q/height) 17/40)]
+                         :color qpu/black
+                         :font "font/UbuntuMono-Regular.ttf")
+   (qpsprite/text-sprite "and"
                          [(* (q/width) 1/2)
                           (* (q/height) 19/40)]
                          :color qpu/black
                          :font "font/UbuntuMono-Regular.ttf")
+   (qpsprite/text-sprite "Kevin MacLeod (incompetech.com)"
+                         [(* (q/width) 1/2)
+                          (* (q/height) 21/40)]
+                         :color qpu/black
+                         :font "font/UbuntuMono-Regular.ttf")
    (qpsprite/text-sprite "Played by You!"
                          [(* (q/width) 1/2)
-                          (* (q/height) 13/20)]
+                          (* (q/height) 27/40)]
                          :color qpu/black
                          :font "font/UbuntuMono-Regular.ttf")])
 
