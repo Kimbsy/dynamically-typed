@@ -1,12 +1,13 @@
-(ns dynamically-typed.scenes.level-07
+(ns dynamically-typed.scenes.level-09
   (:require [dynamically-typed.command :as command]
+            [dynamically-typed.sound :as sound]
             [dynamically-typed.sprites.goal :as goal]
+            [dynamically-typed.sprites.hold :as hold]
             [dynamically-typed.sprites.particle :as particle]
             [dynamically-typed.sprites.pickup :as pickup]
             [dynamically-typed.sprites.platform :as platform]
             [dynamically-typed.sprites.player :as player]
             [dynamically-typed.utils :as u]
-            [quil.core :as q]
             [quip.collision :as qpcollision]
             [quip.scene :as qpscene]
             [quip.utils :as qpu]))
@@ -22,56 +23,46 @@
       qpscene/update-scene-sprites
       particle/clear-particles
       command/decay-display-delays
-      ((u/check-victory-fn :level-08))))
+      ((u/check-victory-fn :credits (fn [state]
+                                      (sound/stop-music)
+                                      (sound/loop-track :glitter)
+                                      state)))))
 
 (defn draw-level
   [state]
   (qpu/background u/dark-grey)
   (qpscene/draw-scene-sprites state)
-  (command/draw-commands state)
-
-  ;; hide platform seam
-  (qpu/fill qpu/grey)
-  (q/rect 68 287 31 15)
-  (q/rect 450 752 300 150))
+  (command/draw-commands state))
 
 (defn init-platforms
   []
   [(platform/floor)
-   (platform/->platform [0 300] 200 30)
-   (platform/->platform [85 240] 30 120)
-   (platform/->platform [530 625] 30 350)
-   (platform/->platform [670 625] 30 350)])
+   (platform/->platform [1200 200] 500 50)])
 
 (defn pickups
   []
-  [(pickup/->pickup [1142 700]
-                    {:turn (command/->command ["turn"]
-                                              player/turn
-                                              :display-delay 65
-                                              :green-delay 100)})
-   (pickup/->pickup [970 700]
-                    {:dive (command/->command ["dive"]
-                                              player/dive
-                                              :display-delay 65
-                                              :green-delay 100)})
-   (pickup/->pickup [800 700]
-                    {:reset (command/->command ["reset"]
-                                               reset-level
-                                               :display-delay 65
-                                               :green-delay 100)})])
+  [])
+
+(defn init-holds
+  []
+  [(hold/->hold [110 600] 200 200)
+   (hold/->hold [410 400] 200 200)
+   (hold/->hold [710 200] 200 200)])
 
 (defn sprites
   []
-  (concat [(player/init-player [50 230])
-           (goal/->goal [600 718])]
+  (concat [(player/init-player [100 700])
+           (goal/->goal [1125 143])]
           (init-platforms)
+          (init-holds)
           (platform/world-bounds)))
 
 (defn commands
   []
-  {:jump  (command/->command ["jump"] player/jump :green-delay 40)
-   :dash  (command/->command ["dash"] player/dash :green-delay 20)})
+  {:dash (command/->command ["dash"] player/dash :green-delay 20)
+   :grab (command/->command ["grab"] player/grab :green-delay 40)
+   :jump (command/->command ["jump"] player/jump :green-delay 60)
+   :reset (command/->command ["reset"] reset-level :green-delay 80)})
 
 (defn colliders
   []
@@ -84,6 +75,7 @@
   [{:keys [current-scene] :as state}]
   (-> state
       (assoc-in [:scenes current-scene :sprites] (sprites))
+      (assoc-in [:scenes current-scene :commands] (commands))
       (assoc-in [:scenes current-scene :colliders] (colliders))))
 
 (defn key-pressed-fns

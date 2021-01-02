@@ -102,25 +102,25 @@
       (-> sprite
           (update :vel (fn [[vx vy]] [vx 0]))
           (update :pos (fn [[x y]] [x (- p-y1 (/ s-h 2))]))
-          (assoc :landed true))
+          (assoc :landed? true))
 
       (bottom-hit? vel-offset-y s-y p-y2 p-x1 p-x2 s-x1 s-x2)
       (-> sprite
           (update :vel (fn [[vx vy]] [vx 0]))
           (update :pos (fn [[x y]] [x (inc (+ p-y2 (/ s-h 2)))]))
-          (assoc :landed false))
+          (assoc :landed? false))
 
       (left-hit? vel-offset-x s-x p-x1 p-y1 p-y2 s-y1 s-y2)
       (-> sprite
           (update :vel (fn [[vx vy]] [0 vy]))
           (update :pos (fn [[x y]] [(dec (- p-x1 (/ s-w 2))) y]))
-          (assoc :landed false))
+          (assoc :landed? false))
 
       (right-hit? vel-offset-x s-x p-x2 p-y1 p-y2 s-y1 s-y2)
       (-> sprite
           (update :vel (fn [[vx vy]] [0 vy]))
           (update :pos (fn [[x y]] [(inc (+ p-x2 (/ s-w 2))) y]))
-          (assoc :landed false))
+          (assoc :landed? false))
 
       :else
       sprite)))

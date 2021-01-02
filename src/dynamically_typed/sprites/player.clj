@@ -2,6 +2,7 @@
   (:require [quip.sprite :as qpsprite]
             [dynamically-typed.utils :as u]
             [dynamically-typed.sound :as sound]
+            [quip.collision :as qpcollision]
             [quip.utils :as qpu]
             [dynamically-typed.sprites.particle :as particle]))
 
@@ -41,7 +42,8 @@
                                                      :y-offset    3
                                                      :frame-delay 2}}
                                  :current-animation :idle)
-       (merge {:landed          false
+       (merge {:landed?          false
+               :grabbing?        false
                :direction       [1 1]
                :animation-timer nil}))))
 
@@ -54,14 +56,14 @@
               [:scenes current-scene :sprites]
               (conj non-players
                     (-> player
-                        (assoc :landed false))))))
+                        (assoc :landed? false))))))
 
 (defn jump
   [{:keys [current-scene] :as state}]
   (let [sprites     (get-in state [:scenes current-scene :sprites])
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
-    (if (:landed player)
+    (if (or (:landed? player) (:grabbing? player))
       (do (sound/jump)
           (assoc-in state
                     [:scenes current-scene :sprites]
@@ -69,7 +71,8 @@
                             [(-> player
                                  (update :vel (fn [[vx vy]] [vx (- vy 5)]))
                                  (update :pos (fn [[x y]] [x (- y 10)]))
-                                 (assoc :landed false)
+                                 (assoc :landed? false)
+                                 (assoc :grabbing? false)
                                  (qpsprite/set-animation :jump)
                                  (assoc :animation-timer 30))]
                             (particle/->particle-group (:pos player)
@@ -94,6 +97,7 @@
                                               (u/add vel
                                                      (u/multiply direction
                                                                  [10 0]))))
+                               (assoc :grabbing? false)
                                (qpsprite/set-animation :dash)
                                (assoc :animation-timer 30))]
                           (particle/->particle-group (:pos player)
@@ -123,7 +127,7 @@
   (let [sprites     (get-in state [:scenes current-scene :sprites])
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
-    (if-not (:landed player)
+    (if-not (:landed? player)
       (do (sound/dive)
           (assoc-in state
                     [:scenes current-scene :sprites]
@@ -137,4 +141,24 @@
                                                        :color u/player-pink
                                                        :count 15
                                                        :life 150))))
+      state)))
+
+(defn grab
+  [{:keys [current-scene] :as state}]
+  (let [sprites     (get-in state [:scenes current-scene :sprites])
+        holds       (filter #(#{:holds} (:sprite-group %)) sprites)
+        non-players (remove #(#{:player} (:sprite-group %)) sprites)
+        player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
+    (if (some (partial qpcollision/w-h-rects-collide? player) holds)
+      (assoc-in state
+                [:scenes current-scene :sprites]
+                (concat non-players
+                        [(-> player
+                             (assoc :grabbing? true)
+                             (assoc :vel [0 0]))]
+                        (particle/->particle-group (:pos player)
+                                                   (:vel player)
+                                                   :color u/player-pink
+                                                   :count 15
+                                                   :life 150)))
       state)))

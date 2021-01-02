@@ -10,6 +10,8 @@
             [dynamically-typed.scenes.level-05 :as level-05]
             [dynamically-typed.scenes.level-06 :as level-06]
             [dynamically-typed.scenes.level-07 :as level-07]
+            [dynamically-typed.scenes.level-08 :as level-08]
+            [dynamically-typed.scenes.level-09 :as level-09]
             [dynamically-typed.scenes.menu :as menu]
             [dynamically-typed.sound :as sound]
             [quip.core :as quip]
@@ -34,6 +36,8 @@
    :level-05   (level-05/init)
    :level-06   (level-06/init)
    :level-07   (level-07/init)
+   :level-08   (level-08/init)
+   :level-09   (level-09/init)
    :credits    (credits/init)})
 
 (defn cleanup

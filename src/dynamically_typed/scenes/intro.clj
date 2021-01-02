@@ -95,7 +95,7 @@
                                    :green-delay 50))
       (assoc-in [:scenes current-scene :sprites]
                 [(-> (player/init-player [100 550])
-                     (assoc :landed true))
+                     (assoc :landed? true))
                  (goal/->goal [100 718])
                  (platform/floor)])
       (assoc-in [:scenes current-scene :draw-fn] draw-completed-intro)

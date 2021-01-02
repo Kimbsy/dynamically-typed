@@ -55,15 +55,15 @@
       i)))
 
 (defn apply-gravity
-  [{:keys [landed] :as s}]
-  (if-not landed
+  [{:keys [landed? grabbing?] :as s}]
+  (if-not (or landed? grabbing?)
     (update s :vel (fn [[vx vy]]
                      [vx (+ vy 0.1)]))
     s))
 
 (defn apply-friction
-  [{:keys [landed] :as s}]
-  (if landed
+  [{:keys [landed?] :as s}]
+  (if landed?
     (update s :vel (fn [[vx vy]]
                      [(zero-ish (* vx 0.95)) vy]))
     s))
