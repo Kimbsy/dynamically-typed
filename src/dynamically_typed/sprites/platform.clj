@@ -1,23 +1,18 @@
 (ns dynamically-typed.sprites.platform
-  (:require [dynamically-typed.utils :as u]
-            [quil.core :as q]
-            [quip.collision :as qpcollision]
-            [quip.sprite :as qpsprite]
-            [quip.utils :as qpu]))
+  (:require [clunk.collision :as collision]
+            [clunk.palette :as p]
+            [clunk.shape :as shape]
+            [clunk.sprite :as sprite]
+            [dynamically-typed.common :as common]))
 
 (defn draw-platform
-  [{[x y] :pos w :w h :h edge? :edge?}]
-  (qpu/fill qpu/grey)
+  [{[x y] :pos
+    [w h] :size
+    :keys [edge?]}]  
+  (shape/fill-rect! [(- x (/ w 2)) (- y (/ h 2))] [w h] p/grey)
   (when edge?
-    (q/stroke-weight 2)
-    (qpu/stroke u/platform-blue))
-  (q/rect (- x (/ w 2))
-          (- y (/ h 2))
-          w
-          h
-          10)
-  (q/stroke-weight 1)
-  (q/no-stroke))
+    ;; (q/stroke-weight 2)
+    (shape/draw-rect! [(- x (/ w 2)) (- y (/ h 2))] [w h] common/platform-blue)))
 
 (defn ->platform
   [pos w h
@@ -27,14 +22,15 @@
    :uuid         (java.util.UUID/randomUUID)
    :pos          pos
    :rotation     0
-   :w            w
-   :h            h
+   :size [w h]
+   :offsets [:center]
    :edge?        edge?
    :animated?    false
    :static?      true
    :update-fn    identity
    :draw-fn      draw-platform
-   :bounds-fn    qpsprite/default-bounding-poly})
+   :bounds-fn    sprite/default-bounding-poly
+   :debug-color p/red})
 
 (defn floor [] (->platform [600 775] 1300 50))
 (defn world-top [] (->platform [600 0] 1200 2 :edge? false))
@@ -76,12 +72,10 @@
 (defn sprite-hit-platform
   [{[vx vy]   :vel
     [s-x s-y] :pos
-    s-w       :w
-    s-h       :h
+    [s-w s-h] :size
     :as       sprite}
    {[p-x p-y] :pos
-    p-w       :w
-    p-h       :h
+    [p-w p-h] :size
     :as       platform}]
   (let [s-x1         (- s-x (/ s-w 2))
         s-x2         (+ s-x (/ s-w 2))
@@ -127,12 +121,12 @@
 
 (defn platform-collider
   [sprite-group]
-  (qpcollision/collider
-    sprite-group
-    :platforms
-    sprite-hit-platform
-    qpcollision/identity-collide-fn
-    :collision-detection-fn
-    (fn [{:keys [phasing?] :as s} platform]
-      (if-not phasing?
-        (qpcollision/w-h-rects-collide? s platform)))))
+  (collision/collider
+   sprite-group
+   :platforms
+   sprite-hit-platform
+   collision/identity-collide-fn
+   :collision-detection-fn
+   (fn [{:keys [phasing?] :as s} platform]
+     (if-not phasing?
+       (collision/w-h-rects-collide? s platform)))))

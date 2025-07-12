@@ -1,16 +1,16 @@
 (ns dynamically-typed.scenes.level-09
-  (:require [dynamically-typed.command :as command]
-            [dynamically-typed.sound :as sound]
+  (:require [clunk.audio :as audio]
+            [clunk.collision :as collision]
+            [clunk.core :as c]
+            [clunk.sprite :as sprite]
+            [dynamically-typed.command :as command]
+            [dynamically-typed.common :as common]
             [dynamically-typed.sprites.goal :as goal]
             [dynamically-typed.sprites.hold :as hold]
             [dynamically-typed.sprites.particle :as particle]
             [dynamically-typed.sprites.pickup :as pickup]
             [dynamically-typed.sprites.platform :as platform]
-            [dynamically-typed.sprites.player :as player]
-            [dynamically-typed.utils :as u]
-            [quip.collision :as qpcollision]
-            [quip.scene :as qpscene]
-            [quip.utils :as qpu]))
+            [dynamically-typed.sprites.player :as player]))
 
 (declare reset-level)
 
@@ -18,20 +18,20 @@
   [state]
   (-> state
       player/reset-player-flags
-      qpcollision/update-collisions
+      collision/update-state
       pickup/remove-finished-pickups
-      qpscene/update-scene-sprites
+      sprite/update-state
       particle/clear-particles
       command/decay-display-delays
-      ((u/check-victory-fn :credits (fn [state]
-                                      (sound/stop-music)
-                                      (sound/loop-track :glitter)
-                                      state)))))
+      ((common/check-victory-fn :credits (fn [{:keys [music-source] :as state}]
+                                           (audio/stop! music-source)
+                                           (audio/play! :glitter :loop? true)
+                                           state)))))
 
 (defn draw-level
   [state]
-  (qpu/background u/dark-grey)
-  (qpscene/draw-scene-sprites state)
+  (c/draw-background! common/dark-grey)
+  (sprite/draw-scene-sprites! state)
   (command/draw-commands state))
 
 (defn init-platforms
@@ -83,11 +83,11 @@
   [command/handle-keypress])
 
 (defn init
-  []
-  {:update-fn       update-level
-   :draw-fn         draw-level
-   :sprites         (concat (sprites)
-                            (pickups))
-   :commands        (commands)
-   :key-pressed-fns (key-pressed-fns)
-   :colliders       (colliders)})
+  [state]
+  {:update-fn update-level
+   :draw-fn   draw-level
+   :sprites   (concat (sprites)
+                      (pickups))
+   :commands  (commands)
+   :key-fns   (key-pressed-fns)
+   :colliders (colliders)})

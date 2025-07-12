@@ -1,17 +1,13 @@
 (ns dynamically-typed.sprites.hold
-  (:require [dynamically-typed.utils :as u]
-            [quil.core :as q]
-            [quip.sprite :as qpsprite]
-            [quip.utils :as qpu]))
+  (:require [clunk.palette :as p]
+            [clunk.shape :as shape]
+            [clunk.sprite :as qpsprite]
+            [dynamically-typed.common :as common]))
 
 (defn draw-hold
-  [{[x y] :pos w :w h :h}]
-  (apply q/fill (conj u/platform-blue 70))
-  (q/rect (- x (/ w 2))
-          (- y (/ h 2))
-          w
-          h
-          10))
+  [{[x y] :pos [w h] :size}]
+  ;; @TODO: corner radius 10px
+  (shape/fill-rect! [(- x (/ w 2)) (- y (/ h 2))] [w h] (assoc common/platform-blue 3 0.275)))
 
 (defn ->hold
   ([pos]
@@ -21,10 +17,10 @@
     :uuid         (java.util.UUID/randomUUID)
     :pos          pos
     :rotation     0
-    :w            w
-    :h            h
+    :size         [w h]
     :animated?    false
     :static?      true
     :update-fn    identity
     :draw-fn      draw-hold
-    :bounds-fn    qpsprite/default-bounding-poly}))
+    :bounds-fn    qpsprite/default-bounding-poly
+    :debug-color  p/red}))

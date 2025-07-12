@@ -1,28 +1,35 @@
 (ns dynamically-typed.sprites.goal
-  (:require [dynamically-typed.sound :as sound]
-            [quip.collision :as qpcollision]
-            [quip.sprite :as qpsprite]))
+  (:require [clunk.collision :as collision]
+            [clunk.sprite :as sprite]
+            [clunk.audio :as audio]
+            [clunk.palette :as p]))
 
 (defn ->goal
   [pos]
-  (qpsprite/animated-sprite :goal pos 96 64 "img/finish/finish.png"
-                            :current-animation :incomplete
-                            :animations {:incomplete {:frames      1
-                                                      :y-offset    0
-                                                      :frame-delay 100}
-                                         :complete   {:frames      2
-                                                      :y-offset    1
-                                                      :frame-delay 20}}))
+  (merge
+   (sprite/animated-sprite :goal
+                           pos
+                           [96 64]
+                           :finish
+                           [192 128]
+                           :current-animation :incomplete
+                           :animations {:incomplete {:frames      1
+                                                     :y-offset    0
+                                                     :frame-delay 100}
+                                        :complete   {:frames      2
+                                                     :y-offset    1
+                                                     :frame-delay 20}})
+   {:debug-color p/red}))
 
 (defn goal-collider
   []
-  (qpcollision/collider
+  (collision/collider
    :player
    :goal
-   qpcollision/identity-collide-fn
+   collision/identity-collide-fn
    (fn [{:keys [current-animation] :as g} _]
      (if (#{:incomplete} current-animation)
        (do
-         (sound/finish)
-         (qpsprite/set-animation g :complete))
+         (audio/play! :finish)
+         (sprite/set-animation g :complete))
        g))))

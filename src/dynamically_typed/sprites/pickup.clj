@@ -1,9 +1,10 @@
 (ns dynamically-typed.sprites.pickup
-  (:require [dynamically-typed.sound :as sound]
+  (:require [clunk.collision :as collision]
+            [clunk.sprite :as sprite]
+            [dynamically-typed.common :as common]
             [dynamically-typed.sprites.particle :as particle]
-            [dynamically-typed.utils :as u]
-            [quip.collision :as qpcollision]
-            [quip.sprite :as qpsprite]))
+            [clunk.palette :as p]
+            [clunk.audio :as audio]))
 
 (defn draw-pickup
   [p]
@@ -11,18 +12,20 @@
 
 (defn ->pickup
   [pos command]
-  (-> (qpsprite/animated-sprite :pickups
-                                pos
-                                48 48
-                                "img/pickup/pickup.png"
-                                :animations {:mutate    {:frames      52
-                                                         :y-offset    0
-                                                         :frame-delay 6}
-                                             :activated {:frames      10
-                                                         :y-offset    1
-                                                         :frame-delay 2}}
-                                :current-animation :mutate)
-      (assoc :command command)))
+  (-> (sprite/animated-sprite :pickups
+                              pos
+                              [48 48]
+                              :pickup
+                              [2496 96]
+                              :animations {:mutate    {:frames      52
+                                                       :y-offset    0
+                                                       :frame-delay 6}
+                                           :activated {:frames      10
+                                                       :y-offset    1
+                                                       :frame-delay 2}}
+                              :current-animation :mutate)
+      (assoc :command command)
+      (assoc :debug-color p/red)))
 
 (defn handle-death
   [{:keys [life] :as p}]
@@ -33,23 +36,23 @@
 (defn update-activated-pickup
   [p]
   (-> p
-      qpsprite/update-animated-sprite
+      sprite/update-animated-sprite
       (update :life dec)
       (handle-death)))
 
 (defn activate-pickup
   [p _]
-  (sound/pickup)
+  (audio/play! :pickup)
   (-> p
       (assoc :sprite-group :activated-pickups)
       (assoc :life 20)
       (assoc :update-fn update-activated-pickup)
-      (qpsprite/set-animation :activated)))
+      (sprite/set-animation :activated)))
 
 (defn pickup-collider
   []
-  (qpcollision/collider :player :pickups
-                        qpcollision/identity-collide-fn
+  (collision/collider :player :pickups
+                        collision/identity-collide-fn
                         activate-pickup))
 
 (defn handle-pickup
@@ -63,7 +66,7 @@
 
 (defn remove-finished-pickups
   [{:keys [current-scene] :as state}]
-  (let [[finished-pickups others] (u/extract-sprite-group state :finished-pickups)]
+  (let [[finished-pickups others] (common/extract-sprite-group state :finished-pickups)]
     (-> state
         (update-in [:scenes current-scene :commands]
                    (fn [commands]

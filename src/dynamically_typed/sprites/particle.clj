@@ -1,17 +1,16 @@
 (ns dynamically-typed.sprites.particle
-  (:require [dynamically-typed.utils :as u]
-            [quip.sprite :as qpsprite]
-            [quil.core :as q]
-            [quip.utils :as qpu]))
+  (:require [clunk.palette :as p]
+            [clunk.shape :as shape]
+            [clunk.sprite :as sprite]
+            [clunk.util :as u]
+            [dynamically-typed.common :as common]))
 
 (defn draw-particle
-  [{[x y] :pos
-    w     :w
-    h     :h
+  [{pos :pos
+    [w h] :size
     color :color
-    :as   p}]
-  (qpu/fill color)
-  (q/rect x y w h))
+    :as p}]
+  (shape/fill-rect! pos [w h] color))
 
 (defn ->particle
   [pos vel color
@@ -22,34 +21,35 @@
    :vel          vel
    :color        color
    :rotation     0
-   :w            3
-   :h            3
+   :size [3 3]
+   :offsets [:center]
    :animated?    false
    :static?      false
-   :update-fn    (comp qpsprite/update-image-sprite
-                       u/apply-gravity
-                       u/apply-friction
-                       u/decay-life-timer)
+   :update-fn    (comp sprite/update-pos
+                       common/apply-gravity
+                       common/apply-friction
+                       common/decay-life-timer)
    :draw-fn      draw-particle
-   :bounds-fn    qpsprite/default-bounding-poly
-   :life         life})
+   :bounds-fn    sprite/default-bounding-poly
+   :life         life
+   :debug-color p/red})
 
 (defn randomize
   [v]
-  (u/add [(- (rand 6) 3)
-          (- (rand 6) 3)]
-         v))
+  (common/add [(- (rand 6) 3)
+               (- (rand 6) 3)]
+              v))
 
 (defn randomize-color
   [color]
   (case (rand-int 3)
     0 color
-    1 (-> color qpu/lighten qpu/lighten qpu/lighten qpu/lighten)
-    2 (-> color qpu/darken qpu/darken)))
+    1 (-> color p/lighten p/lighten p/lighten p/lighten)
+    2 (-> color p/darken p/darken)))
 
 (defn random-color
   []
-  (let [colors [u/light-blue u/light-red u/light-green]]
+  (let [colors [common/light-blue common/light-red common/light-green]]
     (get colors
          (rand-int (count colors)))))
 
@@ -74,8 +74,8 @@
       (update p :targeting-delay dec)
       (let [tv   [(- tx px) (- ty py)]
             utv  (u/unit-vector tv)
-            tvel (u/multiply utv [2 3])]
-        (assoc p :vel (u/add current-vel tvel))))))
+            tvel (common/multiply utv [2 3])]
+        (assoc p :vel (common/add current-vel tvel))))))
 
 (defn remove-arrived
   [[tx ty]]
@@ -88,16 +88,16 @@
 (defn ->homing-particle-group
   [pos vel target-pos
    & {:keys [color]
-      :or {color u/light-yellow}}]
+      :or {color common/light-yellow}}]
   (let [basic-group (->particle-group pos vel :color color :life 100)]
     (map (fn [p]
            (-> p
                (assoc :phasing? true)
                (assoc :targeting-delay 30)
-               (assoc :update-fn (comp qpsprite/update-image-sprite
+               (assoc :update-fn (comp sprite/update-pos
                                        (retarget target-pos)
                                        (remove-arrived target-pos)
-                                       u/decay-life-timer))))
+                                       common/decay-life-timer))))
          basic-group)))
 
 (defn clear-particles

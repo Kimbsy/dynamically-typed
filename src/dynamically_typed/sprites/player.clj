@@ -1,10 +1,10 @@
 (ns dynamically-typed.sprites.player
-  (:require [quip.sprite :as qpsprite]
-            [dynamically-typed.utils :as u]
-            [dynamically-typed.sound :as sound]
-            [quip.collision :as qpcollision]
-            [quip.utils :as qpu]
-            [dynamically-typed.sprites.particle :as particle]))
+  (:require [clunk.collision :as collision]
+            [clunk.sprite :as sprite]
+            [dynamically-typed.common :as common]
+            [dynamically-typed.sprites.particle :as particle]
+            [clunk.audio :as audio]
+            [clunk.palette :as p]))
 
 (defn decay-animation-timer
   [{:keys [animation-timer] :as p}]
@@ -12,7 +12,7 @@
     (if (zero? animation-timer)
       (-> p
           (assoc :animation-timer nil)
-          (qpsprite/set-animation :idle))
+          (sprite/set-animation :idle))
       (update p :animation-timer dec))
     p))
 
@@ -20,32 +20,33 @@
   ([]
    (init-player [100 70]))
   ([pos]
-   (-> (qpsprite/animated-sprite :player
-                                 pos
-                                 32
-                                 32
-                                 "img/player/player.png"
-                                 :update-fn (comp qpsprite/update-animated-sprite
-                                                  u/apply-gravity
-                                                  u/apply-friction
-                                                  decay-animation-timer)
-                                 :animations {:idle {:frames      4
-                                                     :y-offset    0
-                                                     :frame-delay 10}
-                                              :jump {:frames      6
-                                                     :y-offset    1
-                                                     :frame-delay 5}
-                                              :dash {:frames      6
-                                                     :y-offset    2
-                                                     :frame-delay 5}
-                                              :turn {:frames      6
-                                                     :y-offset    3
-                                                     :frame-delay 2}}
-                                 :current-animation :idle)
+   (-> (sprite/animated-sprite :player
+                               pos
+                               [32 32]
+                               :player
+                               [192 128]
+                               :update-fn (comp sprite/update-animated-sprite
+                                                common/apply-gravity
+                                                common/apply-friction
+                                                decay-animation-timer)
+                               :animations {:idle {:frames      4
+                                                   :y-offset    0
+                                                   :frame-delay 10}
+                                            :jump {:frames      6
+                                                   :y-offset    1
+                                                   :frame-delay 5}
+                                            :dash {:frames      6
+                                                   :y-offset    2
+                                                   :frame-delay 5}
+                                            :turn {:frames      6
+                                                   :y-offset    3
+                                                   :frame-delay 2}}
+                               :current-animation :idle)
        (merge {:landed?          false
                :grabbing?        false
                :direction       [1 1]
-               :animation-timer nil}))))
+               :animation-timer nil
+               :debug-color p/red}))))
 
 (defn reset-player-flags
   [{:keys [current-scene] :as state}]
@@ -64,7 +65,7 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
     (if (or (:landed? player) (:grabbing? player))
-      (do (sound/jump)
+      (do (audio/play! :jump)
           (assoc-in state
                     [:scenes current-scene :sprites]
                     (concat non-players
@@ -73,11 +74,11 @@
                                  (update :pos (fn [[x y]] [x (- y 10)]))
                                  (assoc :landed? false)
                                  (assoc :grabbing? false)
-                                 (qpsprite/set-animation :jump)
+                                 (sprite/set-animation :jump)
                                  (assoc :animation-timer 30))]
                             (particle/->particle-group (:pos player)
                                                        (:vel player)
-                                                       :color u/player-pink
+                                                       :color common/player-pink
                                                        :count 15
                                                        :life 150))))
       state)))
@@ -88,21 +89,21 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))
         direction   (:direction player)]
-    (do (sound/dash)
+    (do (audio/play! :dash)
         (assoc-in state
                   [:scenes current-scene :sprites]
                   (concat non-players
                           [(-> player
                                (update :vel (fn [vel]
-                                              (u/add vel
-                                                     (u/multiply direction
-                                                                 [10 0]))))
+                                              (common/add vel
+                                                          (common/multiply direction
+                                                                           [10 0]))))
                                (assoc :grabbing? false)
-                               (qpsprite/set-animation :dash)
+                               (sprite/set-animation :dash)
                                (assoc :animation-timer 30))]
                           (particle/->particle-group (:pos player)
                                                      (:vel player)
-                                                     :color u/player-pink
+                                                     :color common/player-pink
                                                      :count 15
                                                      :life 150))))))
 
@@ -112,14 +113,14 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))
         direction   (:direction player)]
-    (do (sound/turn)
+    (do (audio/play! :turn)
         (assoc-in state
                   [:scenes current-scene :sprites]
                   (conj non-players
                         (-> player
-                            (update :direction u/flip-x)
-                            (update :vel u/flip-x)
-                            (qpsprite/set-animation :turn)
+                            (update :direction common/flip-x)
+                            (update :vel common/flip-x)
+                            (sprite/set-animation :turn)
                             (assoc :animation-timer 12)))))))
 
 (defn dive
@@ -128,17 +129,17 @@
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
     (if-not (:landed? player)
-      (do (sound/dive)
+      (do (audio/play! :dive)
           (assoc-in state
                     [:scenes current-scene :sprites]
                     (concat non-players
                             [(-> player
                                  (update :vel (fn [[vx vy]] [0 (+ vy 5)]))
-                                 (qpsprite/set-animation :jump)
+                                 (sprite/set-animation :jump)
                                  (assoc :animation-timer 30))]
                             (particle/->particle-group (:pos player)
                                                        (:vel player)
-                                                       :color u/player-pink
+                                                       :color common/player-pink
                                                        :count 15
                                                        :life 150))))
       state)))
@@ -149,7 +150,7 @@
         holds       (filter #(#{:holds} (:sprite-group %)) sprites)
         non-players (remove #(#{:player} (:sprite-group %)) sprites)
         player      (first (filter #(#{:player} (:sprite-group %)) sprites))]
-    (if (some (partial qpcollision/w-h-rects-collide? player) holds)
+    (if (some (partial collision/w-h-rects-collide? player) holds)
       (assoc-in state
                 [:scenes current-scene :sprites]
                 (concat non-players
@@ -158,7 +159,7 @@
                              (assoc :vel [0 0]))]
                         (particle/->particle-group (:pos player)
                                                    (:vel player)
-                                                   :color u/player-pink
+                                                   :color common/player-pink
                                                    :count 15
                                                    :life 150)))
       state)))

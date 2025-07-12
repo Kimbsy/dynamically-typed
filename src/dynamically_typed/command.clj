@@ -1,10 +1,11 @@
 (ns dynamically-typed.command
   (:require [clojure.string :as s]
-            [dynamically-typed.sound :as sound]
+            [clunk.audio :as audio]
+            [clunk.palette :as p]
+            [clunk.sprite :as sprite]
+            [dynamically-typed.common :as common]
             [dynamically-typed.sprites.particle :as particle]
-            [dynamically-typed.utils :as u]
-            [quil.core :as q]
-            [quip.utils :as qpu]))
+            [clunk.input :as i]))
 
 (defn ->progress
   [command-alias]
@@ -62,7 +63,7 @@
                     (concat sprites
                             (particle/->particle-group [x-offset y-offset]
                                                        [0 0]
-                                                       :color u/light-green
+                                                       :color common/light-green
                                                        :count 15
                                                        :life 50)))))
     state))
@@ -109,12 +110,14 @@
           commands))
 
 (defn handle-keypress
-  [{:keys [current-scene] :as state} {raw :raw-key :as e}]
-  (if (u/alpha? raw)
-    (-> state
-        (update-in [:scenes current-scene :commands]
-                   #(reduce-commands % raw))
-        apply-on-completes)
+  [{:keys [current-scene] :as state} {raw :k :as e}]
+  (if (i/is e :action i/PRESS)
+    (if-let [c (common/key->alpha raw)]
+      (-> state
+          (update-in [:scenes current-scene :commands]
+                     #(reduce-commands % c))
+          apply-on-completes)
+      state)
     state))
 
 (defn clear
@@ -129,31 +132,38 @@
     state))
 
 (defn draw-character
-  [i c [x-offset y-offset]]
-  (q/text (str c) (+ x-offset (* i 12.5)) y-offset))
+  [state i c [x-offset y-offset] color]
+  ;; @TODO: don't create a new sprite each time
+  (sprite/draw-text-sprite!
+   state
+   (sprite/text-sprite :command-char
+                       [(+ x-offset (* i 12.5))
+                        y-offset]
+                       (str c)
+                       :color color)))
 
 (defn draw-command
-  [i [command-key {:keys [display-delay green-delay] :as command}] font]
+  [state i [command-key {:keys [display-delay green-delay] :as command}] font]
   (when (neg? display-delay)
     (let [complete  (apply str (:complete (first (:progression command))))
           remaining (apply str (:remaining (first (:progression command))))]
-      (q/text-font font)
-      (qpu/fill qpu/green)
-      (mapv #(draw-character %1 %2 [20 (+ 40 (* i 35))])
+      ;; (q/text-font font)
+      (mapv #(draw-character state %1 %2 [20 (+ 40 (* i 35))] p/green)
             (range)
             complete)
-      (when (neg? green-delay)
-        (qpu/fill qpu/white))
-      (mapv #(draw-character %1 %2 [(+ 20 (* 12.5 (count complete))) (+ 40 (* i 35))])
-            (range)
-            remaining))))
+      (let [color (if (neg? green-delay)
+                    p/white
+                    p/green)]
+        (mapv #(draw-character state %1 %2 [(+ 20 (* 12.5 (count complete))) (+ 40 (* i 35))] color)
+              (range)
+              remaining)))))
 
 (defn draw-commands
   [{:keys [current-scene default-font] :as state}]
   (let [commands (get-in state [:scenes current-scene :commands])]
     (->> commands
          (sort-by first)
-         (mapv #(draw-command %1 %2 default-font) (range)))))
+         (mapv #(draw-command state %1 %2 default-font) (range)))))
 
 (defn decay-kill-delay
   [{:keys [kill-delay] :as command}]
@@ -168,7 +178,7 @@
                (into {}
                      (map (fn [[k {:keys [display-delay resetting?] :as c}]]
                             (when (and sound? (zero? display-delay))
-                              (sound/new-command))
+                              (audio/play! :new-command))
                             (let [new-c (-> c
                                             (update :display-delay dec)
                                             (update :green-delay dec)
