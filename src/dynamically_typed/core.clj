@@ -20,10 +20,7 @@
 (defn setup
   [state]
   (assoc state :music-source
-         (audio/play! :mellow :loop? true))
-  ;; {:default-font (q/create-font "font/UbuntuMono-Regular.ttf" qpu/default-text-size)
-  ;;  :giant-font   (q/create-font "font/UbuntuMono-Regular.ttf" 250)}
-  )
+         (audio/play! :mellow :loop? true)))
 
 (defn init-scenes
   [state]

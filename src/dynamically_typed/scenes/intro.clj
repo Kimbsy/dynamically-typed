@@ -21,20 +21,19 @@
       (command/decay-display-delays :sound? false)
       ((common/check-victory-fn :level-01))))
 
-;; @TODO: need to make text big
 (defn draw-big-letter-command
   [{:keys [window] :as state} [command-key {:keys [display-delay green-delay] :as command}] font]
   (when (neg? display-delay)
     (let [complete  (apply str (:complete (first (:progression command))))
           remaining (apply str (:remaining (first (:progression command))))
           [w h] (u/window-size window)]
-      ;; (q/text-font font)
       (sprite/draw-text-sprite!
        state
        (sprite/text-sprite :big-command
                            [(/ w 2) (/ h 2)]
                            complete
-                           :color p/green))
+                           :color p/green
+                           :font-size 250))
       (let [color (if (neg? green-delay)
                     p/white
                     p/green)]
@@ -43,7 +42,8 @@
          (sprite/text-sprite :big-command
                              [(/ w 2) (- (/ h 2) 90)]
                              remaining
-                             :color color))))))
+                             :color color
+                             :font-size 250))))))
 
 (defn draw-big-letter-commands
   [{:keys [current-scene giant-font] :as state}]
