@@ -25,8 +25,8 @@
       command/decay-display-delays
       ((common/check-victory-fn :credits (fn [{:keys [music-source] :as state}]
                                            (audio/stop! music-source)
-                                           (audio/play! :glitter :loop? true)
-                                           state)))))
+                                           (assoc state :music-source
+                                                  (audio/play! :glitter :loop? true)))))))
 
 (defn draw-level
   [state]

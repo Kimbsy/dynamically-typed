@@ -57,9 +57,9 @@
                     :transition-length 30
                     :init-fn (fn [{:keys [music-source] :as state}]
                                (audio/stop! music-source)
-                               (audio/play! :driving :loop? true)
                                (-> state
-                                     (assoc-in [:scenes :credits :commands] (credits/commands))))))
+                                   (assoc :music-source (audio/play! :driving :loop? true))
+                                   (assoc-in [:scenes :credits :commands] (credits/commands))))))
 
 (defn on-click-quit
   [state e]
@@ -71,8 +71,9 @@
                     :transition-length 30
                     :init-fn (fn [{:keys [music-source] :as state}]
                                (audio/stop! music-source)
-                               (audio/play! :glitter :loop? true)
-                               (common/unclick-all-buttons state))))
+                               (-> state
+                                   (assoc :music-source (audio/play! :glitter :loop? true))
+                                   common/unclick-all-buttons))))
 
 (defn text-sprites
   [{:keys [window]}]

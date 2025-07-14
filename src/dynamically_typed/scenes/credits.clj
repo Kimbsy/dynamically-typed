@@ -85,8 +85,8 @@
                     :transition-length 30
                     :init-fn (fn [{:keys [music-source] :as state}]
                                (audio/stop! music-source)
-                               (audio/play! :mellow :loop? true)
                                (-> state
+                                   (assoc :music-source (audio/play! :mellow :loop? true))
                                    (assoc-in [:scenes :intro] (intro/init state))
                                    (assoc-in [:scenes :level-01] (level-01/init state))
                                    (assoc-in [:scenes :level-02] (level-02/init state))
