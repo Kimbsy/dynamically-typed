@@ -33,32 +33,16 @@
 
 (defn draw-header
   []
-  (let [points [[-30  485]
-                [535  485]
-                [635  385]
-                [1200 385]
+  (let [points [[-30 545]
+                [565 545]
+                [665 445]
                 [1200 445]
-                [665  445]
-                [565  545]
-                [-30  545]]
-        poly-1 [[-30  485]
-                [535  485]
-                [565  545]
-                [-30  545]]
-        poly-2 [[535  485]
-                [635  385]
-                [665  445]
-                [565  545]]
-        poly-3 [[635  385]
                 [1200 385]
-                [1200 445]
-                [665  445]]]
-    (shape/fill-poly! [0 100] poly-1 common/player-pink)
-    (shape/fill-poly! [0 100] poly-2 common/player-pink)
-    (shape/fill-poly! [0 100] poly-3 common/player-pink)
-    (shape/fill-poly! [30 20] poly-1 common/platform-blue)
-    (shape/fill-poly! [30 20] poly-2 common/platform-blue)
-    (shape/fill-poly! [30 20] poly-3 common/platform-blue)))
+                [635 385]
+                [535 485]
+                [-30 485]]]
+    (shape/fill-concave-poly! [0 100] points common/player-pink)
+    (shape/fill-concave-poly! [30 20] points common/platform-blue)))
 
 (defn draw-credits
   [{:keys [window] :as state}]

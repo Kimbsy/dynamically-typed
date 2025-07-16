@@ -18,32 +18,16 @@
 
 (defn draw-header!
   []
-  (let [points [[-30 140]
-                [535 140]
-                [635 38]
-                [1200 38]
-                [1200 115]
-                [665 115]
+  (let [points [[-30 215]
                 [565 215]
-                [-30 215]]
-        poly-1 [[-30 140]
-                [535 140]
-                [565 215]
-                [-30 215]]
-        poly-2 [[535 140]
-                [635 38]
                 [665 115]
-                [565 215]]
-        poly-3 [[635 38]
-                [1200 38]
                 [1200 115]
-                [665 115]]]
-    (shape/fill-poly! [0 -15] poly-1 common/player-pink)
-    (shape/fill-poly! [0 -15] poly-2 common/player-pink)
-    (shape/fill-poly! [0 -15] poly-3 common/player-pink)
-    (shape/fill-poly! [30 85] poly-1 common/platform-blue)
-    (shape/fill-poly! [30 85] poly-2 common/platform-blue)
-    (shape/fill-poly! [30 85] poly-3 common/platform-blue)))
+                [1200 38]
+                [635 38]
+                [535 140]
+                [-30 140]]]
+    (shape/fill-concave-poly! [0 -15] points common/player-pink)
+    (shape/fill-concave-poly! [30 85] points common/platform-blue)))
 
 (defn draw-menu
   [state]
